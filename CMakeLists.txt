@@ -8,6 +8,31 @@ set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(CMAKE_MACOSX_RPATH 1)
 
+# Google Test Framework
+ExternalProject_Add(
+  GTest
+  URL https://github.com/google/googletest/archive/release-1.7.0.zip
+  INSTALL_COMMAND ""
+)
+
+ExternalProject_Get_Property(GTest source_dir)
+set(GTEST_INCLUDE_DIR ${source_dir}/include)
+include_directories("${GTEST_INCLUDE_DIR}")
+
+ExternalProject_Get_Property(GTest binary_dir)
+
+set(GTEST_LIBRARY_PATH ${binary_dir}/${CMAKE_FIND_LIBRARY_PREFIXES}gtest.a)
+set(GTEST_LIBRARY gtest)
+add_library(${GTEST_LIBRARY} UNKNOWN IMPORTED)
+set_property(TARGET ${GTEST_LIBRARY} PROPERTY IMPORTED_LOCATION ${GTEST_LIBRARY_PATH})
+add_dependencies(${GTEST_LIBRARY} GTest)
+
+set(GTEST_LIBRARY_MAIN_PATH ${binary_dir}/${CMAKE_FIND_LIBRARY_PREFIXES}gtest_main.a)
+set(GTEST_LIBRARY_MAIN gtest_main)
+add_library(${GTEST_LIBRARY_MAIN} UNKNOWN IMPORTED)
+set_property(TARGET ${GTEST_LIBRARY_MAIN} PROPERTY IMPORTED_LOCATION ${GTEST_LIBRARY_MAIN_PATH})
+add_dependencies(${GTEST_LIBRARY_MAIN} GTest)
+
 add_subdirectory (src)
 add_subdirectory (examples)
 add_subdirectory (tests)
