@@ -1,0 +1,7 @@
+require "bundler/gem_tasks"
+require 'rake/extensiontask'
+
+spec = Gem::Specification.load('brainy.gemspec')
+Rake::ExtensionTask.new('brainy', spec) do |ext|
+  ext.lib_dir = 'lib/brainy'
+end
