@@ -1,0 +1,2 @@
+* Nguyen Widrow weight initialization
+* RPROP or Manhattan
