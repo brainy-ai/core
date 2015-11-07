@@ -25,26 +25,29 @@
 #include "brainy/neural/trainer/plugin/SmartMomentum.hpp"
 #include "brainy/neural/trainer/plugin/Monitor.hpp"
 #include "brainy/neural/TrainingPair.hpp"
-#include "brainy/neural/randomize/Basic.hpp"
+#include "brainy/neural/randomize/BasicRandomize.hpp"
 #include "brainy/Util.hpp"
 
 namespace neural = brainy::neural;
 namespace util = brainy::util;
 
+const double NN_TRUE = 1.0;
+const double NN_FALSE = -1.0;
+
 static std::vector<neural::TrainingPair*> truthTable = {
-  new neural::TrainingPair({0.0, 0.0}, {0.0}),
-  new neural::TrainingPair({0.0, 1.0}, {1.0}),
-  new neural::TrainingPair({1.0, 0.0}, {1.0}),
-  new neural::TrainingPair({1.0, 1.0}, {0.0})
+  new neural::TrainingPair({NN_TRUE, NN_TRUE}, {NN_FALSE}),
+  new neural::TrainingPair({NN_FALSE, NN_TRUE}, {NN_TRUE}),
+  new neural::TrainingPair({NN_TRUE, NN_FALSE}, {NN_TRUE}),
+  new neural::TrainingPair({NN_TRUE, NN_TRUE}, {NN_FALSE})
 };
 
 int main(void) {
   neural::Linear linear;
-  neural::Sigmoid sigmoid;
+  neural::Tanh activation;
 
   neural::Layer inputLayer(2, &linear, true);
-  neural::Layer hiddenLayer(2, &sigmoid, true);
-  neural::Layer outputLayer(1, &sigmoid);
+  neural::Layer hiddenLayer(4, &activation, true);
+  neural::Layer outputLayer(1, &activation);
 
   neural::FeedForward network;
   network.addLayer(inputLayer);
@@ -55,7 +58,7 @@ int main(void) {
   neural::BackPropagation trainer(network);
   trainer.appendTrainingPairs(truthTable);
   trainer.setLearningRate(0.5);
-  trainer.setGoal(0.00000000001);
+  trainer.setGoal(0.01);
   trainer.setMomentum(0.1);
   neural::Monitor monitor;
   trainer.addPlugin(monitor);
@@ -66,11 +69,11 @@ int main(void) {
   trainer.setBatchSize(0);
   trainer.train();
 
-  network.setInput({0.9, 0.0});
+  network.setInput({NN_TRUE, NN_FALSE});
   network.activate();
   util::print(network.getOutput());
 
-  network.setInput({0.9, 0.9});
+  network.setInput({NN_TRUE, NN_TRUE});
   network.activate();
   util::print(network.getOutput());
 
