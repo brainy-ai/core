@@ -19,21 +19,29 @@
 
 #include "brainy/neural/trainer/plugin/Plugin.hpp"
 #include "brainy/neural/trainer/Trainer.hpp"
+#include "brainy/neural/trainer/Momentum.hpp"
 #include <cmath>
-#include <iostream>
+#include <stdexcept>
 
 namespace brainy {
   namespace neural {
     static double MIN_IMPROVEMENT = 0.0001;
 
+    void SmartMomentum::init() {
+      momentum = dynamic_cast<Momentum*>(getTrainer());
+      if (!momentum) {
+        throw new std::invalid_argument("SmartMomentum can be used only with trainers implementing Momentum interface.");
+      }
+    }
+
     void SmartMomentum::preTrain() {
-      trainer->setMomentum(0.0);
+      momentum->setMomentum(0.0);
       cycle = 0;
     }
 
     void SmartMomentum::preEpoch() {
       if (ready) {
-        double currError = trainer->getPrevEpochError();
+        double currError = getTrainer()->getPrevEpochError();
         double improvement = (currError - lastError) / lastError;
 
         if ((improvement > 0.0) || (fabs(improvement) < MIN_IMPROVEMENT)) {
@@ -42,22 +50,21 @@ namespace brainy {
           if (cycle > 10) {
             cycle = 0;
 
-            if (trainer->getMomentum() == 0.0) {
-              trainer->setMomentum(0.1);
+            if (momentum->getMomentum() == 0.0) {
+              momentum->setMomentum(0.1);
             }
 
-            trainer->setMomentum(trainer->getMomentum() * (1.0 + 0.01));
-            // std::cout << "momentum = " << trainer->getMomentum() << std::endl;
+            momentum->setMomentum(momentum->getMomentum() * (1.0 + 0.01));
           }
         }
         else {
-          trainer->setMomentum(0.0);
+          momentum->setMomentum(0.0);
         }
       }
     }
 
     void SmartMomentum::postEpoch() {
-      lastError = trainer->getPrevEpochError();
+      lastError = getTrainer()->getPrevEpochError();
       ready = true;
     }
   }

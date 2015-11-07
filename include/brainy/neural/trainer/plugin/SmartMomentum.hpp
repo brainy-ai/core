@@ -22,13 +22,17 @@
 
 namespace brainy {
   namespace neural {
+    class Momentum;
+
     class SmartMomentum : public Plugin {
     public:
-      virtual void preTrain();
-      virtual void preEpoch();
-      virtual void postEpoch();
+      void preTrain();
+      void preEpoch();
+      void postEpoch();
+      void init();
 
     private:
+      Momentum *momentum;
       bool ready = false;
       double lastError = 0.0;
       int cycle = 0;
