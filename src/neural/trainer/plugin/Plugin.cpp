@@ -22,5 +22,9 @@ namespace brainy {
     void Plugin::setTrainer(Trainer &trainer) {
       this->trainer = &trainer;
     }
+
+    Trainer *Plugin::getTrainer() {
+      return trainer;
+    }
   }
 }

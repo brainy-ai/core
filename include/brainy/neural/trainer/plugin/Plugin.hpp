@@ -29,9 +29,12 @@ namespace brainy {
       virtual void preEpoch() {}
       virtual void postEpoch() {}
       virtual void postTrain() {}
-      void setTrainer(Trainer &trainer);
+      virtual void setTrainer(Trainer &trainer) final;
 
     protected:
+      virtual Trainer *getTrainer() final;
+
+    private:
       Trainer *trainer;
     };
   }
