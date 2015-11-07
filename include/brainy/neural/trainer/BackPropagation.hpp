@@ -1,4 +1,6 @@
 #include "brainy/neural/trainer/Trainer.hpp"
+#include "brainy/neural/trainer/Momentum.hpp"
+#include "brainy/neural/trainer/LearningRate.hpp"
 #include "brainy/neural/TrainingData.hpp"
 #include "brainy/neural/network/FeedForward.hpp"
 
@@ -8,7 +10,7 @@ namespace brainy {
   namespace neural {
     class Neuron;
 
-    class BackPropagation : public Trainer {
+    class BackPropagation : public Trainer, public Momentum, public LearningRate {
     public:
       BackPropagation(FeedForward& network) : Trainer(network) {};
       void setBatchSize(const int size);
