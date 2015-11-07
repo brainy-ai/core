@@ -17,7 +17,6 @@
 
 #include "brainy/neural/trainer/plugin/SmartMomentum.hpp"
 
-#include "brainy/neural/trainer/plugin/Plugin.hpp"
 #include "brainy/neural/trainer/Trainer.hpp"
 #include "brainy/neural/trainer/Momentum.hpp"
 #include <cmath>

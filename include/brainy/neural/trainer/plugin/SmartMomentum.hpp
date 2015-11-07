@@ -18,13 +18,13 @@
 #ifndef BRAINY_NEURAL_TRAINER_PLUGIN_SMARTMOMENTUM_HPP
 #define BRAINY_NEURAL_TRAINER_PLUGIN_SMARTMOMENTUM_HPP
 
-#include "brainy/neural/trainer/plugin/Plugin.hpp"
+#include "brainy/neural/trainer/plugin/TrainerPlugin.hpp"
 
 namespace brainy {
   namespace neural {
     class Momentum;
 
-    class SmartMomentum : public Plugin {
+    class SmartMomentum : public TrainerPlugin {
     public:
       void preTrain();
       void preEpoch();
