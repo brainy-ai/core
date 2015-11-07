@@ -18,13 +18,13 @@
 #ifndef BRAINY_NEURAL_TRAINER_PLUGIN_MONITOR_HPP
 #define BRAINY_NEURAL_TRAINER_PLUGIN_MONITOR_HPP
 
-#include "brainy/neural/trainer/plugin/Plugin.hpp"
+#include "brainy/neural/trainer/plugin/TrainerPlugin.hpp"
 #include "brainy/neural/trainer/LearningRate.hpp"
 #include "brainy/neural/trainer/Momentum.hpp"
 
 namespace brainy {
   namespace neural {
-    class Monitor : public Plugin {
+    class Monitor : public TrainerPlugin {
     public:
       void init();
       void preTrain();
