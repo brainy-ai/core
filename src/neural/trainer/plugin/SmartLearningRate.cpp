@@ -23,13 +23,17 @@
 
 namespace brainy {
   namespace neural {
-    void SmartLearningRate::preTrain() {
-      trainer->setLearningRate(maxRate / trainer->getTrainingSet().size());
+    void SmartLearningRate::init() {
+      learningRate = dynamic_cast<LearningRate*>(getTrainer());
     }
 
-    void SmartLearningRate::preEpoch() {
+    void SmartLearningRate::preTrain() {
+      learningRate->setLearningRate(maxRate / getTrainer()->getTrainingSet().size());
+    }
+
+    void SmartLearningRate::postEpoch() {
       if (ready) {
-        double ratio = trainer->getPrevEpochError() / lastError;
+        double ratio = getTrainer()->getPrevEpochError() / lastError;
 
         if (ratio > maxPerfInc) {
           adjustRate(rateDec);
@@ -37,20 +41,22 @@ namespace brainy {
           adjustRate(rateInc);
         }
       }
+      else {
+        ready = true;
+      }
     }
 
-    void SmartLearningRate::postEpoch() {
-      lastError = trainer->getPrevEpochError();
-      ready = true;
+    void SmartLearningRate::preEpoch() {
+      lastError = getTrainer()->getPrevEpochError();
     }
 
     void SmartLearningRate::adjustRate(const double ratio) {
-      double rate = trainer->getLearningRate() * ratio;
+      double rate = learningRate->getLearningRate() * ratio;
 
       rate = fmin(rate, maxRate);
       rate = fmax(rate, minRate);
 
-      trainer->setLearningRate(rate);
+      learningRate->setLearningRate(rate);
     }
   }
 }

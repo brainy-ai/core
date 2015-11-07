@@ -19,16 +19,19 @@
 #define BRAINY_NEURAL_TRAINER_PLUGIN_SMARTLEARNINGRATE_HPP
 
 #include "brainy/neural/trainer/plugin/Plugin.hpp"
+#include "brainy/neural/trainer/LearningRate.hpp"
 
 namespace brainy {
   namespace neural {
     class SmartLearningRate : public Plugin {
     public:
-      virtual void preTrain();
-      virtual void preEpoch();
-      virtual void postEpoch();
+      void init();
+      void preTrain();
+      void preEpoch();
+      void postEpoch();
 
     private:
+      LearningRate *learningRate;
       void adjustRate(const double ratio);
 
       double minRate = 0.001;
