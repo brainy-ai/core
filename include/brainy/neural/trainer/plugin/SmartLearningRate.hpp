@@ -18,12 +18,12 @@
 #ifndef BRAINY_NEURAL_TRAINER_PLUGIN_SMARTLEARNINGRATE_HPP
 #define BRAINY_NEURAL_TRAINER_PLUGIN_SMARTLEARNINGRATE_HPP
 
-#include "brainy/neural/trainer/plugin/Plugin.hpp"
+#include "brainy/neural/trainer/plugin/TrainerPlugin.hpp"
 #include "brainy/neural/trainer/LearningRate.hpp"
 
 namespace brainy {
   namespace neural {
-    class SmartLearningRate : public Plugin {
+    class SmartLearningRate : public TrainerPlugin {
     public:
       void init();
       void preTrain();
