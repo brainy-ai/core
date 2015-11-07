@@ -18,7 +18,6 @@
 #include "brainy/neural/trainer/BackPropagation.hpp"
 #include "brainy/neural/network/FeedForward.hpp"
 #include "brainy/neural/activation/ActivationFunction.hpp"
-
 #include <iostream>
 #include <cassert>
 
@@ -52,7 +51,7 @@ namespace brainy {
 
     void BackPropagation::epoch() {
       int batchIndex = 0;
-      int size = batchSize;
+      size_t size = batchSize;
 
       if (size == 0 || size > trainingSet.size()) {
         size = trainingSet.size();
@@ -88,8 +87,8 @@ namespace brainy {
       for (auto input : neuron->getInputs()) {
         TrainingData *data = static_cast<TrainingData*>(neuron->getTrainingData());
 
-        double change = learningRate * data->delta * input->getValue();
-        change += momentum * data->lastChange;
+        double change = getLearningRate() * data->delta * input->getValue();
+        change += getMomentum() * data->lastChange;
 
         data->lastChange = change;
 
@@ -104,7 +103,7 @@ namespace brainy {
 
       assert(neurons.size() == patternError.size());
 
-      for (int i = 0; i < neurons.size(); i++) {
+      for (size_t i = 0; i < neurons.size(); i++) {
         auto neuron = neurons.at(i);
         double derivative = neuron->getActivation()->derivative(neuron->getOutput());
         TrainingData *data = static_cast<TrainingData*>(neuron->getTrainingData());
