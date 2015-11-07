@@ -36,17 +36,12 @@ namespace brainy {
       virtual void postEpoch();
       virtual void postTrain();
       virtual void train();
-      virtual void applyBatchCorrections() {};
       virtual void epoch() = 0;
       virtual void setGoal(const double goal);
       virtual void addTrainingPair(TrainingPair &pair);
       virtual void appendTrainingPairs(std::vector<TrainingPair*> &pairs);
-      virtual void setLearningRate(const double learningRate);
-      virtual double getLearningRate();
       virtual double getPrevEpochError();
       virtual std::vector<TrainingPair*> &getTrainingSet();
-      double getMomentum();
-      void setMomentum(const double momentum);
       int getIteration();
 
     protected:
@@ -57,8 +52,6 @@ namespace brainy {
       int maxEpochs = 100000000;
       int iteration;
       double goal = 0.1;
-      double momentum = 0.3;
-      double learningRate = 0.7;
       double prevEpochError;
     };
   }
