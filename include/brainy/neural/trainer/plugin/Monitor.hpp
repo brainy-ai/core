@@ -19,17 +19,22 @@
 #define BRAINY_NEURAL_TRAINER_PLUGIN_MONITOR_HPP
 
 #include "brainy/neural/trainer/plugin/Plugin.hpp"
+#include "brainy/neural/trainer/LearningRate.hpp"
+#include "brainy/neural/trainer/Momentum.hpp"
 
 namespace brainy {
   namespace neural {
     class Monitor : public Plugin {
     public:
+      void init();
       void preTrain();
       void postEpoch();
       void postTrain();
 
     private:
       void show();
+      LearningRate *learningRate;
+      Momentum *momentum;
 
       int cycles = 10000;
       int lastShow;
