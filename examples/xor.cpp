@@ -15,56 +15,53 @@
  * limitations under the License.
  */
 
-#include "brainy/neural/Layer.hpp"
-#include "brainy/neural/activation/Tanh.hpp"
-#include "brainy/neural/activation/Sigmoid.hpp"
-#include "brainy/neural/activation/Linear.hpp"
-#include "brainy/neural/network/FeedForward.hpp"
-#include "brainy/neural/trainer/BackPropagation.hpp"
-#include "brainy/neural/trainer/plugin/SmartLearningRate.hpp"
-#include "brainy/neural/trainer/plugin/SmartMomentum.hpp"
-#include "brainy/neural/trainer/plugin/Monitor.hpp"
-#include "brainy/neural/TrainingPair.hpp"
-#include "brainy/neural/randomize/BasicRandomize.hpp"
+#include "brainy/Layer.hpp"
+#include "brainy/activation/Tanh.hpp"
+#include "brainy/activation/Sigmoid.hpp"
+#include "brainy/activation/Linear.hpp"
+#include "brainy/network/FeedForward.hpp"
+#include "brainy/trainer/BackPropagation.hpp"
+#include "brainy/trainer/plugin/SmartLearningRate.hpp"
+#include "brainy/trainer/plugin/SmartMomentum.hpp"
+#include "brainy/trainer/plugin/Monitor.hpp"
+#include "brainy/TrainingPair.hpp"
+#include "brainy/randomize/BasicRandomize.hpp"
 #include "brainy/Util.hpp"
-
-namespace neural = brainy::neural;
-namespace util = brainy::util;
 
 const double NN_TRUE = 1.0;
 const double NN_FALSE = -1.0;
 
-static std::vector<neural::TrainingPair*> truthTable = {
-  new neural::TrainingPair({NN_TRUE, NN_TRUE}, {NN_FALSE}),
-  new neural::TrainingPair({NN_FALSE, NN_TRUE}, {NN_TRUE}),
-  new neural::TrainingPair({NN_TRUE, NN_FALSE}, {NN_TRUE}),
-  new neural::TrainingPair({NN_TRUE, NN_TRUE}, {NN_FALSE})
+static std::vector<brainy::TrainingPair*> truthTable = {
+  new brainy::TrainingPair({NN_TRUE, NN_TRUE}, {NN_FALSE}),
+  new brainy::TrainingPair({NN_FALSE, NN_TRUE}, {NN_TRUE}),
+  new brainy::TrainingPair({NN_TRUE, NN_FALSE}, {NN_TRUE}),
+  new brainy::TrainingPair({NN_TRUE, NN_TRUE}, {NN_FALSE})
 };
 
 int main(void) {
-  neural::Linear linear;
-  neural::Tanh activation;
+  brainy::Linear linear;
+  brainy::Tanh activation;
 
-  neural::Layer inputLayer(2, &linear, true);
-  neural::Layer hiddenLayer(4, &activation, true);
-  neural::Layer outputLayer(1, &activation);
+  brainy::Layer inputLayer(2, &linear, true);
+  brainy::Layer hiddenLayer(4, &activation, true);
+  brainy::Layer outputLayer(1, &activation);
 
-  neural::FeedForward network;
+  brainy::FeedForward network;
   network.addLayer(inputLayer);
   network.addLayer(hiddenLayer);
   network.addLayer(outputLayer);
   network.finalize();
 
-  neural::BackPropagation trainer(network);
+  brainy::BackPropagation trainer(network);
   trainer.appendTrainingPairs(truthTable);
   trainer.setLearningRate(0.5);
   trainer.setGoal(0.01);
   trainer.setMomentum(0.1);
-  neural::Monitor monitor;
+  brainy::Monitor monitor;
   trainer.addPlugin(monitor);
-  neural::SmartMomentum momentum;
+  brainy::SmartMomentum momentum;
   trainer.addPlugin(momentum);
-  neural::SmartLearningRate slr;
+  brainy::SmartLearningRate slr;
   trainer.addPlugin(slr);
   trainer.setBatchSize(0);
   trainer.train();
