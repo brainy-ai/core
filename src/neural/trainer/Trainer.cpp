@@ -16,7 +16,7 @@
  */
 
 #include "brainy/neural/trainer/Trainer.hpp"
-#include "brainy/neural/trainer/plugin/Plugin.hpp"
+#include "brainy/neural/trainer/plugin/TrainerPlugin.hpp"
 #include "brainy/neural/network/Network.hpp"
 
 #include <iostream>
@@ -69,6 +69,10 @@ namespace brainy {
       postTrain();
     }
 
+    double Trainer::getGoal() {
+      return goal;
+    }
+
     void Trainer::setGoal(const double goal) {
       this->goal = goal;
     }
@@ -91,7 +95,7 @@ namespace brainy {
       return prevEpochError;
     }
 
-    void Trainer::addPlugin(Plugin &plugin) {
+    void Trainer::addPlugin(TrainerPlugin &plugin) {
       plugins.push_back(&plugin);
       plugin.setTrainer(*this);
       plugin.init();

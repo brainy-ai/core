@@ -25,19 +25,24 @@
 namespace brainy {
   namespace neural {
     class Network;
-    class Plugin;
+    class TrainerPlugin;
 
     class Trainer {
     public:
       Trainer(Network& network) : network(network), error(*(new RMS())) {}
-      void addPlugin(Plugin &plugin);
+      void addPlugin(TrainerPlugin &plugin);
+
       virtual void preTrain();
       virtual void preEpoch();
+      virtual void epoch() = 0;
       virtual void postEpoch();
       virtual void postTrain();
+
       virtual void train();
-      virtual void epoch() = 0;
-      virtual void setGoal(const double goal);
+
+      virtual double getGoal() final;
+      virtual void setGoal(const double goal) final;
+
       virtual void addTrainingPair(TrainingPair &pair);
       virtual void appendTrainingPairs(std::vector<TrainingPair*> &pairs);
       virtual double getPrevEpochError();
@@ -48,7 +53,7 @@ namespace brainy {
       Network& network;
       ErrorFunction& error;
       std::vector<TrainingPair*> trainingSet;
-      std::vector<Plugin*> plugins;
+      std::vector<TrainerPlugin*> plugins;
       int maxEpochs = 100000000;
       int iteration;
       double goal = 0.1;
