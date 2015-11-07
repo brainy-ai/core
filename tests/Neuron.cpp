@@ -1,34 +1,34 @@
 #include "gtest/gtest.h"
-#include "brainy/neural/Neuron.hpp"
-#include "brainy/neural/activation/Sigmoid.hpp"
-#include "brainy/neural/Connection.hpp"
+#include "brainy/Neuron.hpp"
+#include "brainy/activation/Sigmoid.hpp"
+#include "brainy/Connection.hpp"
 
 #include <iostream>
 
 TEST(NeuronTest, ActivationFunction) {
-  brainy::neural::Neuron neuron(nullptr, false);
+  brainy::Neuron neuron(nullptr, false);
   ASSERT_EQ(nullptr, neuron.getActivation());
 }
 
 TEST(NeuronTest, NotBias) {
-  brainy::neural::Neuron neuron(nullptr, false);
+  brainy::Neuron neuron(nullptr, false);
   ASSERT_EQ(false, neuron.isBias());
 }
 
 TEST(NeuronTest, Bias) {
-  brainy::neural::Neuron neuron(nullptr, true);
+  brainy::Neuron neuron(nullptr, true);
   ASSERT_EQ(true, neuron.isBias());
 }
 
 TEST(NeuronTest, InputNeuron) {
-  brainy::neural::Neuron neuron(nullptr, false);
+  brainy::Neuron neuron(nullptr, false);
   neuron.setInput(1.23);
   neuron.activate();
   ASSERT_NEAR(1.23, neuron.getOutput(), 0.001);
 }
 
 TEST(NeuronTest, BiasOutput) {
-  brainy::neural::Neuron neuron(nullptr, true);
+  brainy::Neuron neuron(nullptr, true);
   neuron.activate();
   ASSERT_NEAR(1.00, neuron.getOutput(), 0.001);
 }
