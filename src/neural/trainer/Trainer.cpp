@@ -17,6 +17,7 @@
 
 #include "brainy/neural/trainer/Trainer.hpp"
 #include "brainy/neural/trainer/plugin/Plugin.hpp"
+#include "brainy/neural/network/Network.hpp"
 
 #include <iostream>
 
@@ -41,8 +42,6 @@ namespace brainy {
     }
 
     void Trainer::postEpoch() {
-      applyBatchCorrections();
-
       for (auto plugin : plugins) {
         plugin->postEpoch();
       }
@@ -84,16 +83,8 @@ namespace brainy {
       }
     }
 
-    void Trainer::setLearningRate(const double learningRate) {
-      this->learningRate = learningRate;
-    }
-
     std::vector<TrainingPair*> &Trainer::getTrainingSet() {
       return trainingSet;
-    }
-
-    double Trainer::getLearningRate() {
-      return learningRate;
     }
 
     double Trainer::getPrevEpochError() {
@@ -103,18 +94,11 @@ namespace brainy {
     void Trainer::addPlugin(Plugin &plugin) {
       plugins.push_back(&plugin);
       plugin.setTrainer(*this);
+      plugin.init();
     }
 
     int Trainer::getIteration() {
       return iteration;
-    }
-
-    double Trainer::getMomentum() {
-      return momentum;
-    }
-
-    void Trainer::setMomentum(const double momentum) {
-      this->momentum = momentum;
     }
   }
 }

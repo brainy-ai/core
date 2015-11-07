@@ -20,7 +20,7 @@
 
 #include <vector>
 #include "brainy/neural/TrainingPair.hpp"
-#include "brainy/neural/error/MSE.hpp"
+#include "brainy/neural/error/RMS.hpp"
 
 namespace brainy {
   namespace neural {
@@ -29,7 +29,7 @@ namespace brainy {
 
     class Trainer {
     public:
-      Trainer(Network& network) : network(network), error(*(new MSE())) {}
+      Trainer(Network& network) : network(network), error(*(new RMS())) {}
       void addPlugin(Plugin &plugin);
       virtual void preTrain();
       virtual void preEpoch();
