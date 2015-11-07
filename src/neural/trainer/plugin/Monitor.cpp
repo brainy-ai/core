@@ -22,18 +22,23 @@
 
 namespace brainy {
   namespace neural {
+    void Monitor::init() {
+      learningRate = dynamic_cast<LearningRate*>(getTrainer());
+      momentum = dynamic_cast<Momentum*>(getTrainer());
+    }
+
     void Monitor::preTrain() {
       start = util::microtime();
     }
 
     void Monitor::postEpoch() {
-      if (trainer->getIteration() % cycles == 1) {
+      if (getTrainer()->getIteration() % cycles == 0) {
         show();
       }
     }
 
     void Monitor::postTrain() {
-      if (lastShow != trainer->getIteration() && trainer->getIteration() > 0) {
+      if (lastShow != getTrainer()->getIteration() && getTrainer()->getIteration() > 0) {
         show();
       }
     }
@@ -42,17 +47,19 @@ namespace brainy {
       unsigned long long period = util::microtime() - start;
 
       std::cout << "------------------------------------" << std::endl;
-      std::cout << "epoch           : " << trainer->getIteration() << std::endl;
-      //          std::cout << "batch size      : " << trainer->getBatchSize() << std::endl;
-      std::cout << "learning rate   : " << trainer->getLearningRate() << std::endl;
-      // momentum
-      // goal
-      std::cout << "error           : " << trainer->getPrevEpochError() << std::endl;
+      std::cout << "epoch           : " << getTrainer()->getIteration() << std::endl;
+      if (learningRate) {
+        std::cout << "learning rate   : " << learningRate->getLearningRate() << std::endl;
+      }
+      if (momentum) {
+        std::cout << "momentum        : " << momentum->getMomentum() << std::endl;
+      }
+      std::cout << "error           : " << getTrainer()->getPrevEpochError() << std::endl;
       std::cout << "time            : " << (period / 1000.0 / 1000.0) << std::endl;
-      std::cout << "speed           : " << trainer->getIteration() / (period / 1000.0 / 1000.0) << " epoch/s " << std::endl;
-      std::cout << "epoch time      : " << (period / 1000.0 / 1000.0) / trainer->getIteration() << std::endl;
+      std::cout << "speed           : " << getTrainer()->getIteration() / (period / 1000.0 / 1000.0) << " epoch/s " << std::endl;
+      std::cout << "epoch time      : " << (period / 1000.0 / 1000.0) / getTrainer()->getIteration() << std::endl;
 
-      lastShow = trainer->getIteration();
+      lastShow = getTrainer()->getIteration();
     }
   }
 }
