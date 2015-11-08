@@ -15,24 +15,21 @@
  * limitations under the License.
  */
 
-#include "brainy/activation/Tanh.hpp"
-
-#include <cmath>
+#include "brainy/VectorTrainingSet.hpp"
+#include "brainy/TrainingPair.hpp"
 
 namespace brainy {
-  double Tanh::primary(const double input) {
-    return tanh(alpha * input);
+  void VectorTrainingSet::add(std::vector<double> input, std::vector<double> ideal) {
+    TrainingPair pair(input, ideal);
+    data.push_back(pair);
   }
 
-  double Tanh::derivative(const double output) {
-    return alpha * (1.0 - (output * output));
+  const TrainingPair &VectorTrainingSet::at(const size_t index) const {
+    return data.at(index);
   }
 
-  bool Tanh::hasFlatSpot() {
-    return false;
+  size_t VectorTrainingSet::size() const {
+    return data.size();
   }
 
-  void Tanh::setAlpha(const double alpha) {
-    this->alpha = alpha;
-  }
 }

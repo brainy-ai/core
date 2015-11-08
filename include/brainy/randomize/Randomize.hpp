@@ -19,14 +19,12 @@
 #define BRAINY_NEURAL_RANDOMIZE_RANDOMIZE_HPP
 
 namespace brainy {
-  namespace neural {
-    class FeedForward;
+  class FeedForward;
 
-    class Randomize {
-    public:
-      virtual void randomize(FeedForward &net) = 0;
-    };
-  }
+  class Randomize {
+  public:
+    virtual void randomize(FeedForward &net) = 0;
+  };
 }
 
 #endif

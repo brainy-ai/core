@@ -19,47 +19,45 @@
 #define BRAINY_NEURAL_TRAINER_TRAINER_HPP
 
 #include <vector>
-#include "brainy/neural/TrainingPair.hpp"
-#include "brainy/neural/error/RMS.hpp"
+#include "brainy/TrainingSet.hpp"
+#include "brainy/VectorTrainingSet.hpp"
+#include "brainy/error/RMS.hpp"
 
 namespace brainy {
-  namespace neural {
-    class Network;
-    class TrainerPlugin;
+  class Network;
+  class TrainerPlugin;
 
-    class Trainer {
-    public:
-      Trainer(Network& network) : network(network), error(*(new RMS())) {}
-      void addPlugin(TrainerPlugin &plugin);
+  class Trainer {
+  public:
+    Trainer(Network& network, TrainingSet& set) : network(network), trainingSet(set), error(*(new RMS())) {}
+    void addPlugin(TrainerPlugin &plugin);
 
-      virtual void preTrain();
-      virtual void preEpoch();
-      virtual void epoch() = 0;
-      virtual void postEpoch();
-      virtual void postTrain();
+    virtual void preTrain();
+    virtual void preEpoch();
+    virtual void epoch() = 0;
+    virtual void postEpoch();
+    virtual void postTrain();
 
-      virtual void train();
+    virtual void train();
 
-      virtual double getGoal() final;
-      virtual void setGoal(const double goal) final;
+    virtual double getGoal() final;
+    virtual void setGoal(const double goal) final;
 
-      virtual void addTrainingPair(TrainingPair &pair);
-      virtual void appendTrainingPairs(std::vector<TrainingPair*> &pairs);
-      virtual double getPrevEpochError();
-      virtual std::vector<TrainingPair*> &getTrainingSet();
-      int getIteration();
+    virtual double getPrevEpochError();
+    int getIteration();
 
-    protected:
-      Network& network;
-      ErrorFunction& error;
-      std::vector<TrainingPair*> trainingSet;
-      std::vector<TrainerPlugin*> plugins;
-      int maxEpochs = 100000000;
-      int iteration;
-      double goal = 0.1;
-      double prevEpochError;
-    };
-  }
+    TrainingSet &getTrainingSet();
+
+  protected:
+    Network& network;
+    TrainingSet &trainingSet;
+    ErrorFunction& error;
+    std::vector<TrainerPlugin*> plugins;
+    int maxEpochs = 100000000;
+    int iteration;
+    double goal = 0.1;
+    double prevEpochError;
+  };
 }
 
 #endif

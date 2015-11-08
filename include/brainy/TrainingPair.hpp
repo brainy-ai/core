@@ -21,13 +21,11 @@
 #include <vector>
 
 namespace brainy {
-  namespace neural {
-    struct TrainingPair {
-      TrainingPair(std::vector<double> input, std::vector<double> output) : input(input), output(output) {}
-      std::vector<double> input;
-      std::vector<double> output;
-    };
-  }
+  struct TrainingPair {
+    TrainingPair(std::vector<double> input, std::vector<double> output) : input(input), output(output) {}
+    std::vector<double> input;
+    std::vector<double> output;
+  };
 }
 
 #endif

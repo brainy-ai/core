@@ -15,25 +15,23 @@
  * limitations under the License.
  */
 
-#include "brainy/neural/activation/Sigmoid.hpp"
+#include "brainy/activation/Sigmoid.hpp"
 #include <cmath>
 
 namespace brainy {
-  namespace neural {
-    double Sigmoid::primary(const double input) {
-      return 1.0 / (1.0 + exp(alpha * -input));
-    }
+  double Sigmoid::primary(const double input) {
+    return 1.0 / (1.0 + exp(alpha * -input));
+  }
 
-    double Sigmoid::derivative(const double output) {
-      return (alpha * (1.0 - output) * output);
-    }
+  double Sigmoid::derivative(const double output) {
+    return (alpha * (1.0 - output) * output);
+  }
 
-    bool Sigmoid::hasFlatSpot() {
-      return true;
-    }
+  bool Sigmoid::hasFlatSpot() {
+    return true;
+  }
 
-    void Sigmoid::setAlpha(const double alpha) {
-      this->alpha = alpha;
-    }
+  void Sigmoid::setAlpha(const double alpha) {
+    this->alpha = alpha;
   }
 }

@@ -15,16 +15,14 @@
  * limitations under the License.
  */
 
-#include "brainy/neural/trainer/plugin/TrainerPlugin.hpp"
+#include "brainy/trainer/plugin/TrainerPlugin.hpp"
 
 namespace brainy {
-  namespace neural {
-    void TrainerPlugin::setTrainer(Trainer &trainer) {
-      this->trainer = &trainer;
-    }
+  void TrainerPlugin::setTrainer(Trainer &trainer) {
+    this->trainer = &trainer;
+  }
 
-    Trainer *TrainerPlugin::getTrainer() {
-      return trainer;
-    }
+  Trainer *TrainerPlugin::getTrainer() {
+    return trainer;
   }
 }

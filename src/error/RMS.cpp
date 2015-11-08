@@ -15,26 +15,24 @@
  * limitations under the License.
  */
 
-#include "brainy/neural/error/RMS.hpp"
+#include "brainy/error/RMS.hpp"
 #include <cmath>
 
 namespace brainy {
-  namespace neural {
-    std::vector<double> RMS::calculate(const std::vector<double> actual, const std::vector<double> expected) {
-      std::vector<double> result(actual.size());
+  std::vector<double> RMS::calculate(const std::vector<double> actual, const std::vector<double> expected) {
+    std::vector<double> result(actual.size());
 
-      for (int i = 0; i < actual.size(); i++) {
-        result[i] = expected[i] - actual[i];
-        totalError += result[i] * result[i];
-      }
-
-      patternCount++;
-
-      return result;
+    for (int i = 0; i < actual.size(); i++) {
+      result[i] = expected[i] - actual[i];
+      totalError += result[i] * result[i];
     }
 
-    double RMS::getResult() {
-      return sqrt(totalError / patternCount);
-    }
+    patternCount++;
+
+    return result;
+  }
+
+  double RMS::getResult() {
+    return sqrt(totalError / patternCount);
   }
 }

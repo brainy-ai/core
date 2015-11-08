@@ -19,26 +19,24 @@
 #define BRAINY_NEURAL_NETWORK_FEEDFORWARD_HPP
 
 #include <vector>
-#include "brainy/neural/network/Network.hpp"
-#include "brainy/neural/randomize/Randomize.hpp"
-#include "brainy/neural/Layer.hpp"
+#include "brainy/network/Network.hpp"
+#include "brainy/randomize/Randomize.hpp"
+#include "brainy/Layer.hpp"
 
 namespace brainy {
-  namespace neural {
-    class FeedForward : public Network {
-    public:
-      void activate();
-      void setInput(std::vector<double> input);
-      std::vector<double> getOutput();
-      void addLayer(Layer& layer);
-      std::vector<Layer*> &getLayers();
-      void finalize();
+  class FeedForward : public Network {
+  public:
+    void activate();
+    void setInput(std::vector<double> input);
+    std::vector<double> getOutput();
+    void addLayer(Layer& layer);
+    std::vector<Layer*> &getLayers();
+    void finalize();
 
-    private:
-      std::vector<Layer*> layers;
-      Randomize& getRandomizer();
-    };
-  }
+  private:
+    std::vector<Layer*> layers;
+    Randomize& getRandomizer();
+  };
 }
 
 #endif

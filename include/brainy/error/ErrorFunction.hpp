@@ -21,18 +21,16 @@
 #include <vector>
 
 namespace brainy {
-  namespace neural {
-    class ErrorFunction {
-    public:
-      virtual void reset();
-      virtual std::vector<double> calculate(const std::vector<double> actual, const std::vector<double> expected) = 0;
-      virtual double getResult() = 0;
+  class ErrorFunction {
+  public:
+    virtual void reset();
+    virtual std::vector<double> calculate(const std::vector<double> actual, const std::vector<double> expected) = 0;
+    virtual double getResult() = 0;
 
-    protected:
-      double totalError = 0.0;
-      int patternCount = 0;
-    };
-  }
+  protected:
+    double totalError = 0.0;
+    int patternCount = 0;
+  };
 }
 
 #endif

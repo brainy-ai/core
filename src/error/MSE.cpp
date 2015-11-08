@@ -15,28 +15,26 @@
  * limitations under the License.
  */
 
-#include "brainy/neural/error/MSE.hpp"
+#include "brainy/error/MSE.hpp"
 #include <cassert>
 
 namespace brainy {
-  namespace neural {
-    std::vector<double> MSE::calculate(const std::vector<double> actual, const std::vector<double> expected) {
-      assert(actual.size() == expected.size());
+  std::vector<double> MSE::calculate(const std::vector<double> actual, const std::vector<double> expected) {
+    assert(actual.size() == expected.size());
 
-      std::vector<double> result(actual.size());
+    std::vector<double> result(actual.size());
 
-      for (int i = 0; i < actual.size(); i++) {
-        result[i] = expected[i] - actual[i];
-        totalError += result[i] * result[i];
-      }
-
-      patternCount++;
-
-      return result;
+    for (int i = 0; i < actual.size(); i++) {
+      result[i] = expected[i] - actual[i];
+      totalError += result[i] * result[i];
     }
 
-    double MSE::getResult() {
-      return totalError / (2.0 * patternCount);
-    }
+    patternCount++;
+
+    return result;
+  }
+
+  double MSE::getResult() {
+    return totalError / (2.0 * patternCount);
   }
 }

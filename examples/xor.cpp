@@ -15,30 +15,15 @@
  * limitations under the License.
  */
 
-#include "brainy/Layer.hpp"
-#include "brainy/activation/Tanh.hpp"
-#include "brainy/activation/Sigmoid.hpp"
-#include "brainy/activation/Linear.hpp"
-#include "brainy/network/FeedForward.hpp"
-#include "brainy/trainer/BackPropagation.hpp"
-#include "brainy/trainer/plugin/SmartLearningRate.hpp"
-#include "brainy/trainer/plugin/SmartMomentum.hpp"
-#include "brainy/trainer/plugin/Monitor.hpp"
-#include "brainy/TrainingPair.hpp"
-#include "brainy/randomize/BasicRandomize.hpp"
-#include "brainy/Util.hpp"
-
-const double NN_TRUE = 1.0;
-const double NN_FALSE = -1.0;
-
-static std::vector<brainy::TrainingPair*> truthTable = {
-  new brainy::TrainingPair({NN_TRUE, NN_TRUE}, {NN_FALSE}),
-  new brainy::TrainingPair({NN_FALSE, NN_TRUE}, {NN_TRUE}),
-  new brainy::TrainingPair({NN_TRUE, NN_FALSE}, {NN_TRUE}),
-  new brainy::TrainingPair({NN_TRUE, NN_TRUE}, {NN_FALSE})
-};
+#include "brainy/brainy.hpp"
 
 int main(void) {
+  brainy::VectorTrainingSet truth_table;
+  truth_table.add({ 1,  1}, {-1});
+  truth_table.add({-1, -1}, {-1});
+  truth_table.add({ 1, -1}, { 1});
+  truth_table.add({-1,  1}, { 1});
+
   brainy::Linear linear;
   brainy::Tanh activation;
 
@@ -52,10 +37,9 @@ int main(void) {
   network.addLayer(outputLayer);
   network.finalize();
 
-  brainy::BackPropagation trainer(network);
-  trainer.appendTrainingPairs(truthTable);
+  brainy::BackPropagation trainer(network, truth_table);
   trainer.setLearningRate(0.5);
-  trainer.setGoal(0.01);
+  trainer.setGoal(0.00001);
   trainer.setMomentum(0.1);
   brainy::Monitor monitor;
   trainer.addPlugin(monitor);
@@ -66,13 +50,13 @@ int main(void) {
   trainer.setBatchSize(0);
   trainer.train();
 
-  network.setInput({NN_TRUE, NN_FALSE});
-  network.activate();
-  util::print(network.getOutput());
+  // network.setInput({NN_TRUE, NN_FALSE});
+  // network.activate();
+  // brainy::util::print(network.getOutput());
 
-  network.setInput({NN_TRUE, NN_TRUE});
-  network.activate();
-  util::print(network.getOutput());
+  // network.setInput({NN_TRUE, NN_TRUE});
+  // network.activate();
+  // brainy::util::print(network.getOutput());
 
   return 0;
 }

@@ -15,9 +15,7 @@
  * limitations under the License.
  */
 
-#include "brainy/neural/randomize/Randomize.hpp"
+#include "brainy/randomize/Randomize.hpp"
 
 namespace brainy {
-  namespace neural {
-  }
 }

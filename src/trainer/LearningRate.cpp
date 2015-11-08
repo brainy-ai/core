@@ -15,16 +15,14 @@
  * limitations under the License.
  */
 
-#include "brainy/neural/trainer/LearningRate.hpp"
+#include "brainy/trainer/LearningRate.hpp"
 
 namespace brainy {
-  namespace neural {
-    void LearningRate::setLearningRate(const double learningRate) {
-      this->learningRate = learningRate;
-    }
+  void LearningRate::setLearningRate(const double learningRate) {
+    this->learningRate = learningRate;
+  }
 
-    double LearningRate::getLearningRate() {
-      return learningRate;
-    }
+  double LearningRate::getLearningRate() {
+    return learningRate;
   }
 }

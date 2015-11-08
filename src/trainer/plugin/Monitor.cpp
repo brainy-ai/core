@@ -15,51 +15,49 @@
  * limitations under the License.
  */
 
-#include "brainy/neural/trainer/plugin/Monitor.hpp"
-#include "brainy/neural/trainer/Trainer.hpp"
+#include "brainy/trainer/plugin/Monitor.hpp"
+#include "brainy/trainer/Trainer.hpp"
 #include "brainy/Util.hpp"
 #include <iostream>
 
 namespace brainy {
-  namespace neural {
-    void Monitor::init() {
-      learningRate = dynamic_cast<LearningRate*>(getTrainer());
-      momentum = dynamic_cast<Momentum*>(getTrainer());
+  void Monitor::init() {
+    learningRate = dynamic_cast<LearningRate*>(getTrainer());
+    momentum = dynamic_cast<Momentum*>(getTrainer());
+  }
+
+  void Monitor::preTrain() {
+    start = util::microtime();
+  }
+
+  void Monitor::postEpoch() {
+    if (getTrainer()->getIteration() % cycles == 0) {
+      show();
     }
+  }
 
-    void Monitor::preTrain() {
-      start = util::microtime();
+  void Monitor::postTrain() {
+    if (lastShow != getTrainer()->getIteration() && getTrainer()->getIteration() > 0) {
+      show();
     }
+  }
 
-    void Monitor::postEpoch() {
-      if (getTrainer()->getIteration() % cycles == 0) {
-        show();
-      }
+  void Monitor::show() {
+    unsigned long long period = util::microtime() - start;
+
+    std::cout << "------------------------------------" << std::endl;
+    std::cout << "epoch           : " << getTrainer()->getIteration() << std::endl;
+    if (learningRate) {
+      std::cout << "learning rate   : " << learningRate->getLearningRate() << std::endl;
     }
-
-    void Monitor::postTrain() {
-      if (lastShow != getTrainer()->getIteration() && getTrainer()->getIteration() > 0) {
-        show();
-      }
+    if (momentum) {
+      std::cout << "momentum        : " << momentum->getMomentum() << std::endl;
     }
+    std::cout << "error           : " << getTrainer()->getPrevEpochError() << std::endl;
+    std::cout << "time            : " << (period / 1000.0 / 1000.0) << std::endl;
+    std::cout << "speed           : " << getTrainer()->getIteration() / (period / 1000.0 / 1000.0) << " epoch/s " << std::endl;
+    std::cout << "epoch time      : " << (period / 1000.0 / 1000.0) / getTrainer()->getIteration() << std::endl;
 
-    void Monitor::show() {
-      unsigned long long period = util::microtime() - start;
-
-      std::cout << "------------------------------------" << std::endl;
-      std::cout << "epoch           : " << getTrainer()->getIteration() << std::endl;
-      if (learningRate) {
-        std::cout << "learning rate   : " << learningRate->getLearningRate() << std::endl;
-      }
-      if (momentum) {
-        std::cout << "momentum        : " << momentum->getMomentum() << std::endl;
-      }
-      std::cout << "error           : " << getTrainer()->getPrevEpochError() << std::endl;
-      std::cout << "time            : " << (period / 1000.0 / 1000.0) << std::endl;
-      std::cout << "speed           : " << getTrainer()->getIteration() / (period / 1000.0 / 1000.0) << " epoch/s " << std::endl;
-      std::cout << "epoch time      : " << (period / 1000.0 / 1000.0) / getTrainer()->getIteration() << std::endl;
-
-      lastShow = getTrainer()->getIteration();
-    }
+    lastShow = getTrainer()->getIteration();
   }
 }

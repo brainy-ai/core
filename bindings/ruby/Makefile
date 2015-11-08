@@ -131,15 +131,15 @@ DISTCLEANDIRS =
 
 extout = 
 extout_prefix = 
-target_prefix = /neural
+target_prefix = 
 LOCAL_LIBS = 
 LIBS =  -lbrainy  -lpthread -ldl -lobjc 
-ORIG_SRCS = brainy_neural_wrap.cxx brainy_util_wrap.cxx
+ORIG_SRCS = brainy_wrap.cxx
 SRCS = $(ORIG_SRCS) 
-OBJS = brainy_neural_wrap.o brainy_util_wrap.o
+OBJS = brainy_wrap.o
 HDRS = 
-TARGET = neural
-TARGET_NAME = neural
+TARGET = brainy
+TARGET_NAME = brainy
 TARGET_ENTRY = Init_$(TARGET_NAME)
 DLLIB = $(TARGET).bundle
 EXTSTATIC = 
@@ -181,7 +181,7 @@ distclean: clean distclean-so distclean-static distclean-rb-default distclean-rb
 realclean: distclean
 install: install-so install-rb
 
-install-so: $(DLLIB) $(TIMESTAMP_DIR)/.RUBYARCHDIR.-.neural.time
+install-so: $(DLLIB) $(TIMESTAMP_DIR)/.RUBYARCHDIR.time
 	$(INSTALL_PROG) $(DLLIB) $(RUBYARCHDIR)
 clean-static::
 	-$(Q)$(RM) $(STATIC_LIB)
@@ -191,7 +191,7 @@ pre-install-rb: Makefile
 pre-install-rb-default: Makefile
 pre-install-rb-default:
 	@$(NULLCMD)
-$(TIMESTAMP_DIR)/.RUBYARCHDIR.-.neural.time:
+$(TIMESTAMP_DIR)/.RUBYARCHDIR.time:
 	$(Q) $(MAKEDIRS) $(@D) $(RUBYARCHDIR)
 	$(Q) $(TOUCH) $@
 
@@ -250,7 +250,7 @@ site-install-rb: install-rb
 	$(Q) $(CC) $(INCFLAGS) $(CPPFLAGS) $(CFLAGS) $(COUTFLAG)$@ -S $<
 
 $(DLLIB): $(OBJS) Makefile
-	$(ECHO) linking shared-object neural/$(DLLIB)
+	$(ECHO) linking shared-object $(DLLIB)
 	-$(Q)$(RM) $(@)
 	$(Q) $(LDSHAREDXX) -o $@ $(OBJS) $(LIBPATH) $(DLDFLAGS) $(LOCAL_LIBS) $(LIBS)
 	$(Q) $(POSTLINK)

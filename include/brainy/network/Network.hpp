@@ -5,15 +5,13 @@
 #include <vector>
 
 namespace brainy {
-  namespace neural {
-    class Network {
-    public:
-      virtual void activate() = 0;
-      virtual void setInput(std::vector<double> input) = 0;
-      virtual std::vector<double> getOutput() = 0;
-      virtual void finalize() {};
-    };
-  }
+  class Network {
+  public:
+    virtual void activate() = 0;
+    virtual void setInput(std::vector<double> input) = 0;
+    virtual std::vector<double> getOutput() = 0;
+    virtual void finalize() {};
+  };
 }
 
 #endif

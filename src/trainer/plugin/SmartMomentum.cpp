@@ -15,57 +15,55 @@
  * limitations under the License.
  */
 
-#include "brainy/neural/trainer/plugin/SmartMomentum.hpp"
+#include "brainy/trainer/plugin/SmartMomentum.hpp"
 
-#include "brainy/neural/trainer/Trainer.hpp"
-#include "brainy/neural/trainer/Momentum.hpp"
+#include "brainy/trainer/Trainer.hpp"
+#include "brainy/trainer/Momentum.hpp"
 #include <cmath>
 #include <stdexcept>
 
 namespace brainy {
-  namespace neural {
-    static double MIN_IMPROVEMENT = 0.0001;
+  static double MIN_IMPROVEMENT = 0.0001;
 
-    void SmartMomentum::init() {
-      momentum = dynamic_cast<Momentum*>(getTrainer());
-      if (!momentum) {
-        throw new std::invalid_argument("SmartMomentum can be used only with trainers implementing Momentum interface.");
-      }
+  void SmartMomentum::init() {
+    momentum = dynamic_cast<Momentum*>(getTrainer());
+    if (!momentum) {
+      throw new std::invalid_argument("SmartMomentum can be used only with trainers implementing Momentum interface.");
     }
+  }
 
-    void SmartMomentum::preTrain() {
-      momentum->setMomentum(0.0);
-      cycle = 0;
-    }
+  void SmartMomentum::preTrain() {
+    momentum->setMomentum(0.0);
+    cycle = 0;
+  }
 
-    void SmartMomentum::preEpoch() {
-      if (ready) {
-        double currError = getTrainer()->getPrevEpochError();
-        double improvement = (currError - lastError) / lastError;
+  void SmartMomentum::preEpoch() {
+    if (ready) {
+      double currError = getTrainer()->getPrevEpochError();
+      double improvement = (currError - lastError) / lastError;
 
-        if ((improvement > 0.0) || (fabs(improvement) < MIN_IMPROVEMENT)) {
-          cycle++;
+      if ((improvement > 0.0) || (fabs(improvement) < MIN_IMPROVEMENT)) {
+        cycle++;
 
-          if (cycle > 10) {
-            cycle = 0;
+        if (cycle > 10) {
+          cycle = 0;
 
-            if (momentum->getMomentum() == 0.0) {
-              momentum->setMomentum(0.1);
-            }
-
-            momentum->setMomentum(momentum->getMomentum() * (1.0 + 0.01));
+          if (momentum->getMomentum() == 0.0) {
+            momentum->setMomentum(0.1);
           }
-        }
-        else {
-          momentum->setMomentum(0.0);
+
+          momentum->setMomentum(momentum->getMomentum() * (1.0 + 0.01));
         }
       }
+      else {
+        momentum->setMomentum(0.0);
+      }
     }
+  }
 
-    void SmartMomentum::postEpoch() {
-      lastError = getTrainer()->getPrevEpochError();
-      ready = true;
-    }
+  void SmartMomentum::postEpoch() {
+    lastError = getTrainer()->getPrevEpochError();
+    ready = true;
   }
 }
 

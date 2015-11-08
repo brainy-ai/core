@@ -15,13 +15,11 @@
  * limitations under the License.
  */
 
-#include "brainy/neural/error/ErrorFunction.hpp"
+#include "brainy/error/ErrorFunction.hpp"
 
 namespace brainy {
-  namespace neural {
-    void ErrorFunction::reset() {
-      totalError = 0.0;
-      patternCount = 0;
-    }
+  void ErrorFunction::reset() {
+    totalError = 0.0;
+    patternCount = 0;
   }
 }

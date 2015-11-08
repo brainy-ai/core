@@ -15,49 +15,47 @@
  * limitations under the License.
  */
 
-#include "brainy/neural/trainer/Trainer.hpp"
-#include "brainy/neural/trainer/plugin/SmartLearningRate.hpp"
+#include "brainy/trainer/Trainer.hpp"
+#include "brainy/trainer/plugin/SmartLearningRate.hpp"
 #include <cmath>
 
 #include <iostream>
 
 namespace brainy {
-  namespace neural {
-    void SmartLearningRate::init() {
-      learningRate = dynamic_cast<LearningRate*>(getTrainer());
-    }
+  void SmartLearningRate::init() {
+    learningRate = dynamic_cast<LearningRate*>(getTrainer());
+  }
 
-    void SmartLearningRate::preTrain() {
-      learningRate->setLearningRate(maxRate / getTrainer()->getTrainingSet().size());
-    }
+  void SmartLearningRate::preTrain() {
+    learningRate->setLearningRate(maxRate / getTrainer()->getTrainingSet().size());
+  }
 
-    void SmartLearningRate::postEpoch() {
-      if (ready) {
-        double ratio = getTrainer()->getPrevEpochError() / lastError;
+  void SmartLearningRate::postEpoch() {
+    if (ready) {
+      double ratio = getTrainer()->getPrevEpochError() / lastError;
 
-        if (ratio > maxPerfInc) {
-          adjustRate(rateDec);
-        } else if (ratio < minPerfInc) {
-          adjustRate(rateInc);
-        }
-      }
-      else {
-        ready = true;
+      if (ratio > maxPerfInc) {
+        adjustRate(rateDec);
+      } else if (ratio < minPerfInc) {
+        adjustRate(rateInc);
       }
     }
-
-    void SmartLearningRate::preEpoch() {
-      lastError = getTrainer()->getPrevEpochError();
+    else {
+      ready = true;
     }
+  }
 
-    void SmartLearningRate::adjustRate(const double ratio) {
-      double rate = learningRate->getLearningRate() * ratio;
+  void SmartLearningRate::preEpoch() {
+    lastError = getTrainer()->getPrevEpochError();
+  }
 
-      rate = fmin(rate, maxRate);
-      rate = fmax(rate, minRate);
+  void SmartLearningRate::adjustRate(const double ratio) {
+    double rate = learningRate->getLearningRate() * ratio;
 
-      learningRate->setLearningRate(rate);
-    }
+    rate = fmin(rate, maxRate);
+    rate = fmax(rate, minRate);
+
+    learningRate->setLearningRate(rate);
   }
 }
 

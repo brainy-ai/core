@@ -18,26 +18,24 @@
 #ifndef BRAINY_NEURAL_TRAINER_PLUGIN_SMARTMOMENTUM_HPP
 #define BRAINY_NEURAL_TRAINER_PLUGIN_SMARTMOMENTUM_HPP
 
-#include "brainy/neural/trainer/plugin/TrainerPlugin.hpp"
+#include "brainy/trainer/plugin/TrainerPlugin.hpp"
 
 namespace brainy {
-  namespace neural {
-    class Momentum;
+  class Momentum;
 
-    class SmartMomentum : public TrainerPlugin {
-    public:
-      void preTrain();
-      void preEpoch();
-      void postEpoch();
-      void init();
+  class SmartMomentum : public TrainerPlugin {
+  public:
+    void preTrain();
+    void preEpoch();
+    void postEpoch();
+    void init();
 
-    private:
-      Momentum *momentum;
-      bool ready = false;
-      double lastError = 0.0;
-      int cycle = 0;
-    };
-  }
+  private:
+    Momentum *momentum;
+    bool ready = false;
+    double lastError = 0.0;
+    int cycle = 0;
+  };
 }
 
 #endif

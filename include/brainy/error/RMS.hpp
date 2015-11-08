@@ -19,16 +19,14 @@
 #define BRAINY_NEURAL_ERROR_RMS_HPP
 
 #include <vector>
-#include "brainy/neural/error/ErrorFunction.hpp"
+#include "brainy/error/ErrorFunction.hpp"
 
 namespace brainy {
-  namespace neural {
-    class RMS : public ErrorFunction {
-    public:
-      virtual std::vector<double> calculate(const std::vector<double> actual, const std::vector<double> expected);
-      virtual double getResult();
-    };
-  }
+  class RMS : public ErrorFunction {
+  public:
+    virtual std::vector<double> calculate(const std::vector<double> actual, const std::vector<double> expected);
+    virtual double getResult();
+  };
 }
 
 #endif

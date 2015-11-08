@@ -18,32 +18,30 @@
 #ifndef BRAINY_NEURAL_TRAINER_PLUGIN_SMARTLEARNINGRATE_HPP
 #define BRAINY_NEURAL_TRAINER_PLUGIN_SMARTLEARNINGRATE_HPP
 
-#include "brainy/neural/trainer/plugin/TrainerPlugin.hpp"
-#include "brainy/neural/trainer/LearningRate.hpp"
+#include "brainy/trainer/plugin/TrainerPlugin.hpp"
+#include "brainy/trainer/LearningRate.hpp"
 
 namespace brainy {
-  namespace neural {
-    class SmartLearningRate : public TrainerPlugin {
-    public:
-      void init();
-      void preTrain();
-      void preEpoch();
-      void postEpoch();
+  class SmartLearningRate : public TrainerPlugin {
+  public:
+    void init();
+    void preTrain();
+    void preEpoch();
+    void postEpoch();
 
-    private:
-      LearningRate *learningRate;
-      void adjustRate(const double ratio);
+  private:
+    LearningRate *learningRate;
+    void adjustRate(const double ratio);
 
-      double minRate = 0.001;
-      double maxRate = 0.900;
-      double rateInc = 1.050;
-      double rateDec = 0.700;
-      double maxPerfInc = 1.04;
-      double minPerfInc = 1.00;
-      double lastError;
-      bool ready = false;
-    };
-  }
+    double minRate = 0.001;
+    double maxRate = 0.900;
+    double rateInc = 1.050;
+    double rateDec = 0.700;
+    double maxPerfInc = 1.04;
+    double minPerfInc = 1.00;
+    double lastError;
+    bool ready = false;
+  };
 }
 
 #endif

@@ -19,11 +19,9 @@
 #define BRAINY_NEURAL_TRAININGDATA_HPP
 
 namespace brainy {
-  namespace neural {
-    struct TrainingData {
-      virtual ~TrainingData() {};
-    };
-  }
+  struct TrainingData {
+    virtual ~TrainingData() {};
+  };
 }
 
 #endif

@@ -15,16 +15,14 @@
  * limitations under the License.
  */
 
-#include "brainy/neural/trainer/Momentum.hpp"
+#include "brainy/trainer/Momentum.hpp"
 
 namespace brainy {
-  namespace neural {
-    void Momentum::setMomentum(const double momentum) {
-      this->momentum = momentum;
-    }
+  void Momentum::setMomentum(const double momentum) {
+    this->momentum = momentum;
+  }
 
-    double Momentum::getMomentum() {
-      return momentum;
-    }
+  double Momentum::getMomentum() {
+    return momentum;
   }
 }

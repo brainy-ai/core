@@ -19,25 +19,23 @@
 #define BRAINY_NEURAL_TRAINER_TRAINERPLUGIN_HPP
 
 namespace brainy {
-  namespace neural {
-    class Trainer;
+  class Trainer;
 
-    class TrainerPlugin {
-    public:
-      virtual void init() {}
-      virtual void preTrain() {}
-      virtual void preEpoch() {}
-      virtual void postEpoch() {}
-      virtual void postTrain() {}
-      virtual void setTrainer(Trainer &trainer) final;
+  class TrainerPlugin {
+  public:
+    virtual void init() {}
+    virtual void preTrain() {}
+    virtual void preEpoch() {}
+    virtual void postEpoch() {}
+    virtual void postTrain() {}
+    virtual void setTrainer(Trainer &trainer) final;
 
-    protected:
-      virtual Trainer *getTrainer() final;
+  protected:
+    virtual Trainer *getTrainer() final;
 
-    private:
-      Trainer *trainer;
-    };
-  }
+  private:
+    Trainer *trainer;
+  };
 }
 
 #endif

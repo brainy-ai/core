@@ -18,21 +18,19 @@
 #ifndef BRAINY_NEURAL_ACTIVATION_TANH
 #define BRAINY_NEURAL_ACTIVATION_TANH
 
-#include "brainy/neural/activation/ActivationFunction.hpp"
+#include "brainy/activation/ActivationFunction.hpp"
 
 namespace brainy {
-  namespace neural {
-    class Tanh : public ActivationFunction {
-    public:
-      double primary(const double input);
-      double derivative(const double output);
-      bool hasFlatSpot();
-      void setAlpha(const double alpha);
+  class Tanh : public ActivationFunction {
+  public:
+    double primary(const double input);
+    double derivative(const double output);
+    bool hasFlatSpot();
+    void setAlpha(const double alpha);
 
-    private:
-      double alpha = 1.0;
-    };
-  }
+  private:
+    double alpha = 1.0;
+  };
 }
 
 #endif

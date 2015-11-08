@@ -15,18 +15,16 @@
  * limitations under the License.
  */
 
-#include "brainy/neural/randomize/BasicRandomize.hpp"
-#include "brainy/neural/network/FeedForward.hpp"
+#include "brainy/randomize/BasicRandomize.hpp"
+#include "brainy/network/FeedForward.hpp"
 #include "brainy/Util.hpp"
 
 namespace brainy {
-  namespace neural {
-    void BasicRandomize::randomize(FeedForward &net) {
-      for (auto layer : net.getLayers()) {
-        for (auto neuron : layer->getNeurons()) {
-          for (auto conn : neuron->getOutputs()) {
-            conn->setWeight(util::random(-0.5, 0.5));
-          }
+  void BasicRandomize::randomize(FeedForward &net) {
+    for (auto layer : net.getLayers()) {
+      for (auto neuron : layer->getNeurons()) {
+        for (auto conn : neuron->getOutputs()) {
+          conn->setWeight(util::random(-0.5, 0.5));
         }
       }
     }

@@ -19,16 +19,14 @@
 #define BRAINY_NEURAL_TRAINER_LEARNINGRATE_HPP
 
 namespace brainy {
-  namespace neural {
-    class LearningRate {
-    public:
-      virtual ~LearningRate() {};
-      void setLearningRate(const double learningRate);
-      double getLearningRate();
-    private:
-      double learningRate = 0.0;
-    };
-  }
+  class LearningRate {
+  public:
+    virtual ~LearningRate() {};
+    void setLearningRate(const double learningRate);
+    double getLearningRate();
+  private:
+    double learningRate = 0.0;
+  };
 }
 
 #endif

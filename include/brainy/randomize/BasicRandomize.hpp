@@ -18,17 +18,15 @@
 #ifndef BRAINY_NEURAL_RANDOMIZE_BASICRANDOMIZE_HPP
 #define BRAINY_NEURAL_RANDOMIZE_BASICRANDOMIZE_HPP
 
-#include "brainy/neural/randomize/Randomize.hpp"
+#include "brainy/randomize/Randomize.hpp"
 
 namespace brainy {
-  namespace neural {
-    class FeedForward;
+  class FeedForward;
 
-    class BasicRandomize : public Randomize {
-    public:
-      void randomize(FeedForward &net);
-    };
-  }
+  class BasicRandomize : public Randomize {
+  public:
+    void randomize(FeedForward &net);
+  };
 }
 
 #endif

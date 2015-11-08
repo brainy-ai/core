@@ -19,16 +19,14 @@
 #define BRAINY_NEURAL_TRAINER_MOMENTUM_HPP
 
 namespace brainy {
-  namespace neural {
-    class Momentum {
-    public:
-      virtual ~Momentum() {};
-      void setMomentum(const double momentum);
-      double getMomentum();
-    private:
-      double momentum = 0.0;
-    };
-  }
+  class Momentum {
+  public:
+    virtual ~Momentum() {};
+    void setMomentum(const double momentum);
+    double getMomentum();
+  private:
+    double momentum = 0.0;
+  };
 }
 
 #endif

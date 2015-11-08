@@ -15,94 +15,82 @@
  * limitations under the License.
  */
 
-#include "brainy/neural/trainer/Trainer.hpp"
-#include "brainy/neural/trainer/plugin/TrainerPlugin.hpp"
-#include "brainy/neural/network/Network.hpp"
+#include "brainy/trainer/Trainer.hpp"
+#include "brainy/trainer/plugin/TrainerPlugin.hpp"
+#include "brainy/network/Network.hpp"
 
 #include <iostream>
 
 namespace brainy {
-  namespace neural {
-    void Trainer::preTrain() {
-      iteration = 0;
+  void Trainer::preTrain() {
+    iteration = 0;
 
-      for (auto plugin : plugins) {
-        plugin->preTrain();
+    for (auto plugin : plugins) {
+      plugin->preTrain();
+    }
+  }
+
+  void Trainer::preEpoch() {
+    iteration++;
+    prevEpochError = error.getResult();
+    error.reset();
+
+    for (auto plugin : plugins) {
+      plugin->preEpoch();
+    }
+  }
+
+  void Trainer::postEpoch() {
+    for (auto plugin : plugins) {
+      plugin->postEpoch();
+    }
+  }
+
+  void Trainer::postTrain() {
+    for (auto plugin : plugins) {
+      plugin->postTrain();
+    }
+  }
+
+  void Trainer::train() {
+    preTrain();
+
+    while (true) {
+      preEpoch();
+      epoch();
+      postEpoch();
+
+      if (prevEpochError <= goal || iteration >= maxEpochs) {
+        break;
       }
     }
 
-    void Trainer::preEpoch() {
-      iteration++;
-      prevEpochError = error.getResult();
-      error.reset();
+    postTrain();
+  }
 
-      for (auto plugin : plugins) {
-        plugin->preEpoch();
-      }
-    }
+  double Trainer::getGoal() {
+    return goal;
+  }
 
-    void Trainer::postEpoch() {
-      for (auto plugin : plugins) {
-        plugin->postEpoch();
-      }
-    }
+  void Trainer::setGoal(const double goal) {
+    this->goal = goal;
+  }
 
-    void Trainer::postTrain() {
-      for (auto plugin : plugins) {
-        plugin->postTrain();
-      }
-    }
+  double Trainer::getPrevEpochError() {
+    return prevEpochError;
+  }
 
-    void Trainer::train() {
-      preTrain();
+  void Trainer::addPlugin(TrainerPlugin &plugin) {
+    plugins.push_back(&plugin);
+    plugin.setTrainer(*this);
+    plugin.init();
+  }
 
-      while (true) {
-        preEpoch();
-        epoch();
-        postEpoch();
+  int Trainer::getIteration() {
+    return iteration;
+  }
 
-        if (prevEpochError <= goal || iteration >= maxEpochs) {
-          break;
-        }
-      }
-
-      postTrain();
-    }
-
-    double Trainer::getGoal() {
-      return goal;
-    }
-
-    void Trainer::setGoal(const double goal) {
-      this->goal = goal;
-    }
-
-    void Trainer::addTrainingPair(TrainingPair &pair) {
-      trainingSet.push_back(&pair);
-    }
-
-    void Trainer::appendTrainingPairs(std::vector<TrainingPair*> &pairs) {
-      for (auto item : pairs) {
-        addTrainingPair(*item);
-      }
-    }
-
-    std::vector<TrainingPair*> &Trainer::getTrainingSet() {
-      return trainingSet;
-    }
-
-    double Trainer::getPrevEpochError() {
-      return prevEpochError;
-    }
-
-    void Trainer::addPlugin(TrainerPlugin &plugin) {
-      plugins.push_back(&plugin);
-      plugin.setTrainer(*this);
-      plugin.init();
-    }
-
-    int Trainer::getIteration() {
-      return iteration;
-    }
+  TrainingSet &Trainer::getTrainingSet() {
+    return trainingSet;
   }
 }
