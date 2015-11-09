@@ -15,48 +15,85 @@
  * limitations under the License.
  */
 
+#include <iostream>
+#include <iomanip>
 #include "brainy/brainy.hpp"
 
 int main(void) {
-  brainy::VectorTrainingSet truth_table;
-  truth_table.add({ 1,  1}, {-1});
-  truth_table.add({-1, -1}, {-1});
-  truth_table.add({ 1, -1}, { 1});
-  truth_table.add({-1,  1}, { 1});
+  // XOR truth table
+  // -1 for false, 1 for true
+  brainy::VectorTrainingSet truthTable;
+  truthTable.add({ 1,  1}, {-1});
+  truthTable.add({-1, -1}, {-1});
+  truthTable.add({ 1, -1}, { 1});
+  truthTable.add({-1,  1}, { 1});
 
+  // Activation functions
   brainy::Linear linear;
   brainy::Tanh activation;
 
+  // Input layer with 2 neurons, linear activation and BIAS
   brainy::Layer inputLayer(2, &linear, true);
+  // Hidden layer with 4 neurons, tanh activation and BIAS
   brainy::Layer hiddenLayer(4, &activation, true);
+  // Output layer with 1 neuron, tanh activation
   brainy::Layer outputLayer(1, &activation);
 
+  // Create network, and plug defined layers
   brainy::FeedForward network;
   network.addLayer(inputLayer);
   network.addLayer(hiddenLayer);
   network.addLayer(outputLayer);
   network.finalize();
 
-  brainy::BackPropagation trainer(network, truth_table);
-  trainer.setLearningRate(0.5);
-  trainer.setGoal(0.00001);
-  trainer.setMomentum(0.1);
+  brainy::BackPropagation trainer(network, truthTable);
+
+  // Monitor plugin to see what's happening during training
   brainy::Monitor monitor;
   trainer.addPlugin(monitor);
+
+  // Smart momentum for better training
   brainy::SmartMomentum momentum;
   trainer.addPlugin(momentum);
+
+  // Smart learning rate for better training
   brainy::SmartLearningRate slr;
   trainer.addPlugin(slr);
+
+  // This is our desirable error
+  trainer.setGoal(0.01);
+
+  // Use batch mode with batch size equal to training set
   trainer.setBatchSize(0);
+
+  // Do training
   trainer.train();
 
-  // network.setInput({NN_TRUE, NN_FALSE});
-  // network.activate();
-  // brainy::util::print(network.getOutput());
+  // Show the results of training
+  std::cout
+    << "\nResult\n======\n"
+    << std::fixed;
+  for (auto &item : truthTable) {
+    network.setInput(item.input);
+    network.activate();
 
-  // network.setInput({NN_TRUE, NN_TRUE});
-  // network.activate();
-  // brainy::util::print(network.getOutput());
+    std::cout
+      << std::setprecision(0)
+      << std::setw(3)
+      << item.input[0]
+      << ", "
+      << std::setw(3)
+      << item.input[1]
+      << " -> "
+      << std::setprecision(3)
+      << std::setw(6)
+      << network.getOutput()[0]
+      << " (expected: "
+      << std::setw(6)
+      << item.output[0]
+      << ")"
+      << std::endl;
+  }
 
   return 0;
 }
