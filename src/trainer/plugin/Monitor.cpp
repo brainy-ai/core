@@ -54,7 +54,7 @@ namespace brainy {
       std::cout << "momentum        : " << momentum->getMomentum() << std::endl;
     }
     std::cout << "error           : " << getTrainer()->getPrevEpochError() << std::endl;
-    std::cout << "time            : " << (period / 1000.0 / 1000.0) << std::endl;
+    std::cout << "time            : " << (period / 1000.0 / 1000.0) << "s" << std::endl;
     std::cout << "speed           : " << getTrainer()->getIteration() / (period / 1000.0 / 1000.0) << " epoch/s " << std::endl;
     std::cout << "epoch time      : " << (period / 1000.0 / 1000.0) / getTrainer()->getIteration() << std::endl;
 

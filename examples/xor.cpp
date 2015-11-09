@@ -52,16 +52,10 @@ int main(void) {
   brainy::Monitor monitor;
   trainer.addPlugin(monitor);
 
-  // Smart momentum for better training
-  brainy::SmartMomentum momentum;
-  trainer.addPlugin(momentum);
-
-  // Smart learning rate for better training
-  brainy::SmartLearningRate slr;
-  trainer.addPlugin(slr);
-
-  // This is our desirable error
+  // Set training parameters
   trainer.setGoal(0.01);
+  trainer.setLearningRate(0.7);
+  trainer.setMomentum(0.1);
 
   // Use batch mode with batch size equal to training set
   trainer.setBatchSize(0);
