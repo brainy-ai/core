@@ -1,7 +1,7 @@
 #include "gtest/gtest.h"
-#include "brainy/Neuron.hpp"
-#include "brainy/activation/Sigmoid.hpp"
-#include "brainy/Connection.hpp"
+#include "brainy/neuron.h"
+#include "brainy/activation/sigmoid.h"
+#include "brainy/connection.h"
 
 #include <iostream>
 

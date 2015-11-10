@@ -1,6 +1,6 @@
 #include "gtest/gtest.h"
-#include "brainy/Neuron.hpp"
-#include "brainy/Connection.hpp"
+#include "brainy/neuron.h"
+#include "brainy/connection.h"
 
 TEST(ConnectionTest, Connections) {
   brainy::Neuron neuron1(nullptr, false);

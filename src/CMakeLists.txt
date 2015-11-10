@@ -1,4 +1,4 @@
-file(GLOB_RECURSE brainy_sources *.cpp)
+file(GLOB_RECURSE brainy_sources *.cc)
 
 add_library(brainy SHARED ${brainy_sources})
 

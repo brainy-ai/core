@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "brainy/activation/Sigmoid.hpp"
+#include "brainy/activation/sigmoid.h"
 
 TEST(SigmoidTest, Function)
 {
