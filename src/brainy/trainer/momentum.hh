@@ -23,7 +23,7 @@ namespace brainy {
   public:
     virtual ~Momentum() {};
     void setMomentum(const double momentum);
-    double getMomentum();
+    double getMomentum() const;
   private:
     double momentum = 0.0;
   };

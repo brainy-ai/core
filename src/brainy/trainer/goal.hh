@@ -15,14 +15,18 @@
  * limitations under the License.
  */
 
-#include "brainy/trainer/momentum.hh"
+#ifndef BRAINY_TRAINER_GOAL_HH
+#define BRAINY_TRAINER_GOAL_HH
 
 namespace brainy {
-  void Momentum::setMomentum(const double momentum) {
-    this->momentum = momentum;
-  }
-
-  double Momentum::getMomentum() const {
-    return momentum;
-  }
+  class Goal {
+  public:
+    virtual ~Goal() {};
+    void setGoal(const double goal);
+    double getGoal() const;
+  private:
+    double goal = 0.05;
+  };
 }
+
+#endif

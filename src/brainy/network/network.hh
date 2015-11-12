@@ -8,8 +8,8 @@ namespace brainy {
   class Network {
   public:
     virtual void activate() = 0;
-    virtual void setInput(std::vector<double> input) = 0;
-    virtual std::vector<double> getOutput() = 0;
+    virtual void setInput(const std::vector<double> &input) = 0;
+    virtual std::vector<double> getOutput() const = 0;
     virtual void finalize() {};
   };
 }

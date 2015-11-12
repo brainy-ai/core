@@ -25,7 +25,7 @@ namespace brainy {
   void Trainer::preTrain() {
     iteration = 0;
 
-    for (auto plugin : plugins) {
+    for (auto *plugin : plugins) {
       plugin->preTrain();
     }
   }
@@ -35,19 +35,19 @@ namespace brainy {
     prevEpochError = error.getResult();
     error.reset();
 
-    for (auto plugin : plugins) {
+    for (auto *plugin : plugins) {
       plugin->preEpoch();
     }
   }
 
   void Trainer::postEpoch() {
-    for (auto plugin : plugins) {
+    for (auto *plugin : plugins) {
       plugin->postEpoch();
     }
   }
 
   void Trainer::postTrain() {
-    for (auto plugin : plugins) {
+    for (auto *plugin : plugins) {
       plugin->postTrain();
     }
   }
@@ -60,20 +60,12 @@ namespace brainy {
       epoch();
       postEpoch();
 
-      if (prevEpochError <= goal || iteration >= maxEpochs) {
+      if (prevEpochError <= getGoal() || iteration >= maxEpochs) {
         break;
       }
     }
 
     postTrain();
-  }
-
-  double Trainer::getGoal() {
-    return goal;
-  }
-
-  void Trainer::setGoal(const double goal) {
-    this->goal = goal;
   }
 
   double Trainer::getPrevEpochError() {

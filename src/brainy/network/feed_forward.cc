@@ -27,23 +27,23 @@ namespace brainy {
     layers.push_back(&layer);
   }
 
-  void FeedForward::setInput(std::vector<double> input) {
+  void FeedForward::setInput(const std::vector<double> &input) {
     auto inputLayer = layers.front();
     auto neurons = inputLayer->getNeurons();
     auto neuronsCount = neurons.size() - (inputLayer->hasBias() ? 1 : 0);
 
     assert(neuronsCount == input.size());
 
-    for (int i = 0; i < input.size(); i++) {
+    for (size_t i = 0; i < input.size(); i++) {
       neurons.at(i)->setInput(input.at(i));
     }
   }
 
-  std::vector<double> FeedForward::getOutput() {
+  std::vector<double> FeedForward::getOutput() const {
     auto neurons = layers.back()->getNeurons();
     std::vector<double> result;
 
-    for (int i = 0; i < neurons.size(); i++) {
+    for (size_t i = 0; i < neurons.size(); i++) {
       result.push_back(neurons.at(i)->getOutput());
     }
 

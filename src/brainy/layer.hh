@@ -29,12 +29,12 @@ namespace brainy {
     Layer(size_t const neurons);
     Layer(size_t const neurons, ActivationFunction* const activation);
     Layer(size_t const neurons, ActivationFunction* const activation, bool const bias);
-    Neuron& neuron(size_t const index);
+    Neuron& neuron(size_t const index) const;
     std::vector<Neuron*>& getNeurons();
     static void interconnect(Layer& source, Layer& target);
     void activate();
     bool hasBias() const;
-    ActivationFunction *getActivation();
+    ActivationFunction *getActivation() const;
 
   private:
     ActivationFunction *activation;

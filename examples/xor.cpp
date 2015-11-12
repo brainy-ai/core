@@ -35,7 +35,7 @@ int main(void) {
   // Input layer with 2 neurons, linear activation and BIAS
   brainy::Layer inputLayer(2, &linear, true);
   // Hidden layer with 4 neurons, tanh activation and BIAS
-  brainy::Layer hiddenLayer(4, &activation, true);
+  brainy::Layer hiddenLayer(1000, &activation, true);
   // Output layer with 1 neuron, tanh activation
   brainy::Layer outputLayer(1, &activation);
 
@@ -53,7 +53,7 @@ int main(void) {
   trainer.addPlugin(monitor);
 
   // Set training parameters
-  trainer.setGoal(0.0000000001);
+  trainer.setGoal(0.00000000000000001);
   trainer.setLearningRate(0.7);
   trainer.setMomentum(0.1);
 

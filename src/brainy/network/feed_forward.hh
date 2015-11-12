@@ -27,8 +27,8 @@ namespace brainy {
   class FeedForward : public Network {
   public:
     void activate();
-    void setInput(std::vector<double> input);
-    std::vector<double> getOutput();
+    void setInput(const std::vector<double> &input);
+    std::vector<double> getOutput() const;
     void addLayer(Layer& layer);
     std::vector<Layer*> &getLayers();
     void finalize();

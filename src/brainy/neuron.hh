@@ -21,10 +21,9 @@
 #include <vector>
 #include "brainy/connection.hh"
 #include "brainy/training_data.hh"
+#include "brainy/activation/activation_function.hh"
 
 namespace brainy {
-  class ActivationFunction;
-
   class Neuron {
   public:
     Neuron(ActivationFunction* const activation, bool const bias);

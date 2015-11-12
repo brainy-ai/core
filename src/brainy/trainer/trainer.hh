@@ -19,6 +19,7 @@
 #define BRAINY_NEURAL_TRAINER_TRAINER_HPP
 
 #include <vector>
+#include "brainy/trainer/goal.hh"
 #include "brainy/training_set.hh"
 #include "brainy/vector_training_set.hh"
 #include "brainy/error/rms.hh"
@@ -27,7 +28,7 @@ namespace brainy {
   class Network;
   class TrainerPlugin;
 
-  class Trainer {
+  class Trainer : public Goal {
   public:
     Trainer(Network& network, TrainingSet& set) : network(network), trainingSet(set), error(*(new RMS())) {}
     void addPlugin(TrainerPlugin &plugin);
@@ -39,9 +40,6 @@ namespace brainy {
     virtual void postTrain();
 
     virtual void train();
-
-    virtual double getGoal() final;
-    virtual void setGoal(const double goal) final;
 
     virtual double getPrevEpochError();
     int getIteration();
@@ -55,7 +53,6 @@ namespace brainy {
     std::vector<TrainerPlugin*> plugins;
     int maxEpochs = 100000000;
     int iteration;
-    double goal = 0.1;
     double prevEpochError;
   };
 }

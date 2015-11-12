@@ -22,7 +22,7 @@ namespace brainy {
     this->learningRate = learningRate;
   }
 
-  double LearningRate::getLearningRate() {
+  double LearningRate::getLearningRate() const {
     return learningRate;
   }
 }

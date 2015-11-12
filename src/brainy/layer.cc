@@ -33,7 +33,7 @@ namespace brainy {
     init(neurons, activation, bias);
   }
 
-  Neuron& Layer::neuron(size_t const index) {
+  Neuron& Layer::neuron(size_t const index) const {
     return *neurons.at(index);
   }
 
@@ -73,7 +73,7 @@ namespace brainy {
     return false;
   }
 
-  ActivationFunction *Layer::getActivation() {
+  ActivationFunction *Layer::getActivation() const {
     return activation;
   }
 

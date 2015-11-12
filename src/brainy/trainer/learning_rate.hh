@@ -23,7 +23,7 @@ namespace brainy {
   public:
     virtual ~LearningRate() {};
     void setLearningRate(const double learningRate);
-    double getLearningRate();
+    double getLearningRate() const;
   private:
     double learningRate = 0.0;
   };

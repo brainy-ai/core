@@ -1,3 +1,4 @@
+#include "brainy/trainer/goal.hh"
 #include "brainy/trainer/trainer.hh"
 #include "brainy/trainer/momentum.hh"
 #include "brainy/trainer/learning_rate.hh"
@@ -20,10 +21,10 @@ namespace brainy {
 
   private:
     int batchSize = 0;
-    void propagate(std::vector<double> patternError);
-    void calculateOutputDeltas(std::vector<double> patternError);
+    void propagate(const std::vector<double> &patternError);
+    void calculateOutputDeltas(const std::vector<double> &patternError);
     void calculateInternalDeltas();
-    void updateNeuronWeights(Neuron* neuron);
+    void updateNeuronWeights(Neuron* const neuron);
     void applyBatchChanges();
 
     struct BPTrainingData : public TrainingData {

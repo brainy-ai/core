@@ -15,14 +15,14 @@
  * limitations under the License.
  */
 
-#include "brainy/trainer/momentum.hh"
+#include "brainy/trainer/goal.hh"
 
 namespace brainy {
-  void Momentum::setMomentum(const double momentum) {
-    this->momentum = momentum;
+  void Goal::setGoal(const double goal) {
+    this->goal = goal;
   }
 
-  double Momentum::getMomentum() const {
-    return momentum;
+  double Goal::getGoal() const {
+    return goal;
   }
 }
