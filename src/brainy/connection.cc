@@ -55,7 +55,7 @@ namespace brainy {
     return getValue() * weight;
   }
 
-  void Connection::setTrainingData(TrainingData *const data) {
+  void Connection::setTrainingData(TrainingData* const data) {
     trainingData = data;
   }
 

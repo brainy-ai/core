@@ -23,8 +23,8 @@
 namespace brainy {
   struct TrainingPair {
     TrainingPair(std::vector<double> input, std::vector<double> output) : input(input), output(output) {}
-    std::vector<double> input;
-    std::vector<double> output;
+    const std::vector<double> input;
+    const std::vector<double> output;
   };
 }
 

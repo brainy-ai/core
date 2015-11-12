@@ -25,7 +25,7 @@ namespace brainy {
     void setLearningRate(const double learningRate);
     double getLearningRate() const;
   private:
-    double learningRate = 0.0;
+    double learningRate = 0.7;
   };
 }
 

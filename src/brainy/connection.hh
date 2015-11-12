@@ -35,7 +35,7 @@ namespace brainy {
     double getValue() const;
     double getWeighedValue() const;
     TrainingData *getTrainingData() const;
-    void setTrainingData(TrainingData *const data);
+    void setTrainingData(TrainingData* const data);
     int const id;
 
   private:
