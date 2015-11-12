@@ -17,7 +17,7 @@
 
 #include <iostream>
 #include <iomanip>
-#include "brainy/brainy.hpp"
+#include "brainy/brainy.hh"
 
 int main(void) {
   // XOR truth table
@@ -53,7 +53,7 @@ int main(void) {
   trainer.addPlugin(monitor);
 
   // Set training parameters
-  trainer.setGoal(0.01);
+  trainer.setGoal(0.0000000001);
   trainer.setLearningRate(0.7);
   trainer.setMomentum(0.1);
 

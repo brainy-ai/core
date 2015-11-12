@@ -1,1 +1,0 @@
-INSTALL(DIRECTORY brainy DESTINATION include)

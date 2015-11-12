@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "brainy/activation/tanh.h"
+#include "brainy/activation/tanh.hh"
 
 TEST(Tanh, Function)
 {
