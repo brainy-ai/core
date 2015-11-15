@@ -26,6 +26,7 @@ namespace brainy {
     double primary(const double input) const override;
     double derivative(const double output) const override;
     bool hasFlatSpot() const override;
+    double getFlatSpotFix() const override;
   };
 }
 

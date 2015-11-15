@@ -26,7 +26,7 @@
 namespace brainy {
   class Neuron {
   public:
-    Neuron(ActivationFunction* const activation, bool const bias);
+    Neuron(ActivationFunction &activation, bool const bias);
     void activate();
     double getInput() const;
     void setInput(double const input);
@@ -36,14 +36,13 @@ namespace brainy {
     bool isBias() const;
     TrainingData *getTrainingData() const;
     void setTrainingData(TrainingData *data);
-    ActivationFunction *getActivation() const;
-    bool hasActivation() const;
+    ActivationFunction &getActivation() const;
     int const id;
 
   private:
     bool const bias;
     double inputsSum() const;
-    ActivationFunction *activation;
+    ActivationFunction &activation;
     TrainingData *trainingData;
     std::vector<Connection*> inputs;
     std::vector<Connection*> outputs;

@@ -21,12 +21,9 @@
 #include "brainy/activation/activation_function.hh"
 
 namespace brainy {
-  Neuron::Neuron(ActivationFunction* const activation,
-                 bool const bias) : id(util::id()),
-                                    bias(bias) {
-    // @todo: dont allow to set empty activation
-    this->activation = activation;
-
+  Neuron::Neuron(ActivationFunction &activation, bool const bias) : id(util::id()),
+                                                                    bias(bias),
+                                                                    activation(activation) {
     if (bias) {
       input = 1.0;
     }
@@ -52,7 +49,7 @@ namespace brainy {
   void Neuron::activate() {
     double value = inputs.empty() ? input : inputsSum();
     // output = (activation != nullptr) ? activation->primary(value) : value;
-    output = activation->primary(value);
+    output = activation.primary(value);
   }
 
   double Neuron::getOutput() const {
@@ -75,11 +72,7 @@ namespace brainy {
     return trainingData;
   }
 
-  ActivationFunction *Neuron::getActivation() const {
+  ActivationFunction &Neuron::getActivation() const {
     return activation;
-  }
-
-  bool Neuron::hasActivation() const {
-    return (activation != nullptr);
   }
 }

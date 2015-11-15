@@ -1,10 +1,13 @@
 #include "gtest/gtest.h"
 #include "brainy/neuron.hh"
+#include "brainy/activation/linear.hh"
 #include "brainy/connection.hh"
 
+static brainy::Linear linear;
+
 TEST(ConnectionTest, Connections) {
-  brainy::Neuron neuron1(nullptr, false);
-  brainy::Neuron neuron2(nullptr, false);
+  brainy::Neuron neuron1(linear, false);
+  brainy::Neuron neuron2(linear, false);
   brainy::Connection connection(neuron1, neuron2);
 
   ASSERT_EQ(&neuron1, &connection.getSource());
@@ -15,8 +18,8 @@ TEST(ConnectionTest, Connections) {
 }
 
 TEST(ConnectionTest, ConnectionsInNeuron) {
-  brainy::Neuron neuron1(nullptr, false);
-  brainy::Neuron neuron2(nullptr, false);
+  brainy::Neuron neuron1(linear, false);
+  brainy::Neuron neuron2(linear, false);
   brainy::Connection connection(neuron1, neuron2);
 
   ASSERT_EQ(&connection, neuron1.getOutputs()[0]);

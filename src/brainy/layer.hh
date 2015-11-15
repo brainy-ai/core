@@ -20,6 +20,7 @@
 
 #include <vector>
 #include "brainy/neuron.hh"
+#include "brainy/activation/linear.hh"
 
 namespace brainy {
   class ActivationFunction;
@@ -27,18 +28,20 @@ namespace brainy {
   class Layer {
   public:
     Layer(size_t const neurons);
-    Layer(size_t const neurons, ActivationFunction* const activation);
-    Layer(size_t const neurons, ActivationFunction* const activation, bool const bias);
+    Layer(size_t const neurons, ActivationFunction &activation);
+    Layer(size_t const neurons, ActivationFunction &activation, bool const bias);
     Neuron& neuron(size_t const index) const;
     std::vector<Neuron*>& getNeurons();
     static void interconnect(Layer& source, Layer& target);
     void activate();
     bool hasBias() const;
-    ActivationFunction *getActivation() const;
+    ActivationFunction &getActivation() const;
 
   private:
-    ActivationFunction *activation;
-    void init(size_t const neurons, ActivationFunction* const activation, bool const bias);
+    static Linear defaultActivation;
+    static Linear biasActivation;
+    ActivationFunction &activation;
+    void init(size_t const neurons, bool const bias);
     std::vector<Neuron*> neurons;
   };
 }

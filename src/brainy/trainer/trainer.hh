@@ -30,7 +30,7 @@ namespace brainy {
 
   class Trainer : public Goal {
   public:
-    Trainer(Network& network, TrainingSet& set) : network(network), trainingSet(set), error(*(new RMS())) {}
+    Trainer(Network& network, TrainingSet& set) : network(network), trainingSet(set), error(rms) {}
     void addPlugin(TrainerPlugin &plugin);
 
     virtual void preTrain();
@@ -47,6 +47,7 @@ namespace brainy {
     TrainingSet &getTrainingSet();
 
   protected:
+    static RMS rms;
     Network& network;
     TrainingSet &trainingSet;
     ErrorFunction& error;

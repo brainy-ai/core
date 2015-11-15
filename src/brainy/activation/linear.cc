@@ -29,4 +29,8 @@ namespace brainy {
   bool Linear::hasFlatSpot() const {
     return false;
   }
+
+  double Linear::getFlatSpotFix() const {
+    return 0.0;
+  }
 }

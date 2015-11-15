@@ -20,13 +20,14 @@
 #include "brainy/activation/activation_function.hh"
 #include <iostream>
 #include <cassert>
+#include <stdexcept>
 
 namespace brainy {
   void BackPropagation::preTrain() {
     for (auto &layer : static_cast<FeedForward*>(&network)->getLayers()) {
       for (auto &neuron : layer->getNeurons()) {
         auto data = new BPTrainingData();
-        data->flatSpotFix = (neuron->hasActivation() && neuron->getActivation()->hasFlatSpot()) ? 0.1 : 0.0;
+        data->flatSpotFix = neuron->getActivation().getFlatSpotFix();
         neuron->setTrainingData(data);
 
         for (auto &conn : neuron->getInputs()) {
@@ -40,7 +41,9 @@ namespace brainy {
   }
 
   void BackPropagation::setBatchSize(const int size) {
-    // add some checks
+    if (size < 0) {
+      throw std::invalid_argument("batch size cannot be negative.");
+    }
     this->batchSize = size;
   }
 
@@ -103,7 +106,7 @@ namespace brainy {
 
     for (size_t i = 0; i < neurons.size(); i++) {
       auto &neuron = neurons.at(i);
-      double derivative = neuron->getActivation()->derivative(neuron->getOutput());
+      double derivative = neuron->getActivation().derivative(neuron->getOutput());
       BPTrainingData *data = static_cast<BPTrainingData*>(neuron->getTrainingData());
       data->delta = patternError[i] * (derivative + data->flatSpotFix);
 
@@ -128,7 +131,7 @@ namespace brainy {
         }
 
         BPTrainingData *data = static_cast<BPTrainingData*>(neuron->getTrainingData());
-        double derivative = neuron->getActivation()->derivative(neuron->getOutput());
+        double derivative = neuron->getActivation().derivative(neuron->getOutput());
         data->delta = (derivative + data->flatSpotFix) * deltaSum;
 
         updateNeuronWeights(neuron);

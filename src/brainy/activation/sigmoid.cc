@@ -31,6 +31,10 @@ namespace brainy {
     return true;
   }
 
+  double Sigmoid::getFlatSpotFix() const {
+    return 0.1;
+  }
+
   void Sigmoid::setAlpha(const double alpha) {
     this->alpha = alpha;
   }

@@ -21,16 +21,19 @@
 #include <cstddef>
 
 namespace brainy {
-  Layer::Layer(size_t const neurons) {
-    init(neurons, nullptr, false);
+  Linear Layer::defaultActivation;
+  Linear Layer::biasActivation;
+
+  Layer::Layer(size_t const neurons) : activation(defaultActivation) {
+    init(neurons, false);
   }
 
-  Layer::Layer(size_t const neurons, ActivationFunction* const activation) {
-    init(neurons, activation, false);
+  Layer::Layer(size_t const neurons, ActivationFunction &activation) : activation(activation) {
+    init(neurons, false);
   }
 
-  Layer::Layer(size_t const neurons, ActivationFunction* const activation, bool const bias) {
-    init(neurons, activation, bias);
+  Layer::Layer(size_t const neurons, ActivationFunction &activation, bool const bias) : activation(activation) {
+    init(neurons, bias);
   }
 
   Neuron& Layer::neuron(size_t const index) const {
@@ -48,14 +51,14 @@ namespace brainy {
     }
   }
 
-  void Layer::init(size_t const neurons, ActivationFunction* const activation, bool const bias) {
+  void Layer::init(size_t const neurons, bool const bias) {
     for (size_t i = 0; i < neurons; i++) {
       Neuron *neuron = new Neuron(activation, false);
       this->neurons.push_back(neuron);
     }
 
     if (bias) {
-      Neuron *biasNeuron = new Neuron(new Linear(), true);
+      Neuron *biasNeuron = new Neuron(biasActivation, true);
       this->neurons.push_back(biasNeuron);
     }
 
@@ -73,7 +76,7 @@ namespace brainy {
     return false;
   }
 
-  ActivationFunction *Layer::getActivation() const {
+  ActivationFunction &Layer::getActivation() const {
     return activation;
   }
 

@@ -32,6 +32,10 @@ namespace brainy {
     return false;
   }
 
+  double Tanh::getFlatSpotFix() const {
+    return 0.0;
+  }
+
   void Tanh::setAlpha(const double alpha) {
     this->alpha = alpha;
   }

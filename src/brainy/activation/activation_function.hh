@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 
-#ifndef BRAINY_NEURAL_ACTIVATION_ACTIVATIONFUNCTION_HPP
-#define BRAINY_NEURAL_ACTIVATION_ACTIVATIONFUNCTION_HPP
+#ifndef BRAINY_ACTIVATION_ACTIVATIONFUNCTION_HPP
+#define BRAINY_ACTIVATION_ACTIVATIONFUNCTION_HPP
 
 namespace brainy {
   class ActivationFunction {
@@ -24,6 +24,7 @@ namespace brainy {
     virtual double primary(const double input) const = 0;
     virtual double derivative(const double output) const = 0;
     virtual bool hasFlatSpot() const = 0;
+    virtual double getFlatSpotFix() const = 0;
   };
 }
 

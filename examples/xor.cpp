@@ -33,11 +33,11 @@ int main(void) {
   brainy::Tanh activation;
 
   // Input layer with 2 neurons, linear activation and BIAS
-  brainy::Layer inputLayer(2, &linear, true);
-  // Hidden layer with 4 neurons, tanh activation and BIAS
-  brainy::Layer hiddenLayer(2, &activation, true);
+  brainy::Layer inputLayer(2, linear, true);
+  // Hidden layer with 2 neurons, tanh activation and BIAS
+  brainy::Layer hiddenLayer(2, activation, true);
   // Output layer with 1 neuron, tanh activation
-  brainy::Layer outputLayer(1, &activation);
+  brainy::Layer outputLayer(1, activation);
 
   // Create network, and plug defined layers
   brainy::FeedForward network;

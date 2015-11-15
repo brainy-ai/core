@@ -22,6 +22,8 @@
 #include <iostream>
 
 namespace brainy {
+  RMS Trainer::rms;
+
   void Trainer::preTrain() {
     iteration = 0;
 
