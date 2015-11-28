@@ -22,7 +22,7 @@
 #include <iostream>
 
 namespace brainy {
-  RMS Trainer::rms;
+  MSE Trainer::mse;
 
   void Trainer::preTrain() {
     iteration = 0;

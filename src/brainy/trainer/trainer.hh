@@ -22,7 +22,7 @@
 #include "brainy/trainer/goal.hh"
 #include "brainy/training_set.hh"
 #include "brainy/vector_training_set.hh"
-#include "brainy/error/rms.hh"
+#include "brainy/error/mse.hh"
 
 namespace brainy {
   class Network;
@@ -30,7 +30,7 @@ namespace brainy {
 
   class Trainer : public Goal {
   public:
-    Trainer(Network& network, TrainingSet& set) : network(network), trainingSet(set), error(rms) {}
+    Trainer(Network& network, TrainingSet& set) : network(network), trainingSet(set), error(mse) {}
     void addPlugin(TrainerPlugin &plugin);
 
     virtual void preTrain();
@@ -47,7 +47,7 @@ namespace brainy {
     TrainingSet &getTrainingSet();
 
   protected:
-    static RMS rms;
+    static MSE mse;
     Network& network;
     TrainingSet &trainingSet;
     ErrorFunction& error;
