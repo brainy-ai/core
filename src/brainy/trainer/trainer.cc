@@ -22,7 +22,7 @@
 #include <iostream>
 
 namespace brainy {
-  MSE Trainer::mse;
+  RMS Trainer::rms;
 
   void Trainer::preTrain() {
     iteration = 0;
@@ -34,8 +34,6 @@ namespace brainy {
 
   void Trainer::preEpoch() {
     iteration++;
-    prevEpochError = error.getResult();
-    error.reset();
 
     for (auto *plugin : plugins) {
       plugin->preEpoch();
@@ -43,6 +41,15 @@ namespace brainy {
   }
 
   void Trainer::postEpoch() {
+    error.reset();
+    for (const TrainingPair &item : trainingSet) {
+      network.setInput(item.input);
+      network.activate();
+
+      error.calculate(network.getOutput(), item.output);
+    }
+    epochError = error.getResult();
+
     for (auto *plugin : plugins) {
       plugin->postEpoch();
     }
@@ -62,7 +69,7 @@ namespace brainy {
       epoch();
       postEpoch();
 
-      if (prevEpochError <= getGoal() || iteration >= maxEpochs) {
+      if (getEpochError() <= getGoal() || iteration >= maxEpochs) {
         break;
       }
     }
@@ -70,8 +77,8 @@ namespace brainy {
     postTrain();
   }
 
-  double Trainer::getPrevEpochError() {
-    return prevEpochError;
+  double Trainer::getEpochError() {
+    return epochError;
   }
 
   void Trainer::addPlugin(TrainerPlugin &plugin) {

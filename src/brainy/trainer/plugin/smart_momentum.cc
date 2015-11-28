@@ -37,9 +37,9 @@ namespace brainy {
     cycle = 0;
   }
 
-  void SmartMomentum::preEpoch() {
+  void SmartMomentum::postEpoch() {
     if (ready) {
-      double currError = getTrainer()->getPrevEpochError();
+      double currError = getTrainer()->getEpochError();
       double improvement = (currError - lastError) / lastError;
 
       if ((improvement > 0.0) || (fabs(improvement) < MIN_IMPROVEMENT)) {
@@ -58,12 +58,12 @@ namespace brainy {
       else {
         momentum->setMomentum(0.0);
       }
+    } else {
+      ready = true;
     }
   }
 
-  void SmartMomentum::postEpoch() {
-    lastError = getTrainer()->getPrevEpochError();
-    ready = true;
+  void SmartMomentum::preEpoch() {
+    lastError = getTrainer()->getEpochError();
   }
 }
-

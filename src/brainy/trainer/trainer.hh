@@ -22,7 +22,7 @@
 #include "brainy/trainer/goal.hh"
 #include "brainy/training_set.hh"
 #include "brainy/vector_training_set.hh"
-#include "brainy/error/mse.hh"
+#include "brainy/error/rms.hh"
 
 namespace brainy {
   class Network;
@@ -30,7 +30,7 @@ namespace brainy {
 
   class Trainer : public Goal {
   public:
-    Trainer(Network& network, TrainingSet& set) : network(network), trainingSet(set), error(mse) {}
+    Trainer(Network& network, TrainingSet& set) : network(network), trainingSet(set), error(rms) {}
     void addPlugin(TrainerPlugin &plugin);
 
     virtual void preTrain();
@@ -41,20 +41,20 @@ namespace brainy {
 
     virtual void train();
 
-    virtual double getPrevEpochError();
+    virtual double getEpochError();
     int getIteration();
 
     TrainingSet &getTrainingSet();
 
   protected:
-    static MSE mse;
+    static RMS rms;
     Network& network;
     TrainingSet &trainingSet;
     ErrorFunction& error;
     std::vector<TrainerPlugin*> plugins;
     int maxEpochs = 100000000;
     int iteration;
-    double prevEpochError;
+    double epochError;
   };
 }
 

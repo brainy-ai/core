@@ -52,8 +52,11 @@ int main(void) {
   brainy::Monitor monitor;
   trainer.addPlugin(monitor);
 
+  brainy::SmartLearningRate slr;
+  //  trainer.addPlugin(slr);
+
   // Set training parameters
-  trainer.setGoal(0.00000000000000001);
+  trainer.setGoal(0.01);
   trainer.setLearningRate(0.7);
   trainer.setMomentum(0.1);
 

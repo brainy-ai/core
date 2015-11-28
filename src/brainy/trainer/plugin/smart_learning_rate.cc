@@ -32,7 +32,7 @@ namespace brainy {
 
   void SmartLearningRate::postEpoch() {
     if (ready) {
-      double ratio = getTrainer()->getPrevEpochError() / lastError;
+      double ratio = getTrainer()->getEpochError() / lastError;
 
       if (ratio > maxPerfInc) {
         adjustRate(rateDec);
@@ -46,7 +46,7 @@ namespace brainy {
   }
 
   void SmartLearningRate::preEpoch() {
-    lastError = getTrainer()->getPrevEpochError();
+    lastError = getTrainer()->getEpochError();
   }
 
   void SmartLearningRate::adjustRate(const double ratio) {
@@ -58,4 +58,3 @@ namespace brainy {
     learningRate->setLearningRate(rate);
   }
 }
-
