@@ -24,8 +24,13 @@ namespace brainy {
     void propagate(const std::vector<double> &patternError);
     void calculateOutputDeltas(const std::vector<double> &patternError);
     void calculateInternalDeltas();
-    void updateNeuronWeights(Neuron* const neuron);
+    //    void updateNeuronWeights(Neuron* const neuron);
+    void updateNeuronWeights(size_t const layerIndex, size_t const neuronIndex);
     void applyBatchChanges();
+
+    std::vector<std::vector<double> > deltas;
+    std::vector<std::vector<double> > lastChanges;
+    std::vector<std::vector<std::vector<double> > > changes;     // changes of weight
 
     struct BPTrainingData : public TrainingData {
       double delta = 0.0;

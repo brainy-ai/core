@@ -16,6 +16,7 @@
  */
 
 #include "brainy/network/feed_forward.hh"
+#include "brainy/input_layer.hh"
 #include "brainy/randomize/basic_randomize.hh"
 
 #include <stdexcept>
@@ -28,26 +29,28 @@ namespace brainy {
   }
 
   void FeedForward::setInput(const std::vector<double> &input) {
-    auto inputLayer = layers.front();
-    auto neurons = inputLayer->getNeurons();
-    auto neuronsCount = neurons.size() - (inputLayer->hasBias() ? 1 : 0);
+    static_cast<InputLayer*>(layers.front())->setInput(input);
+    // auto inputLayer = layers.front();
+    // auto neurons = inputLayer->getNeurons();
+    // auto neuronsCount = neurons.size() - (inputLayer->hasBias() ? 1 : 0);
 
-    assert(neuronsCount == input.size());
+    // assert(neuronsCount == input.size());
 
-    for (size_t i = 0; i < input.size(); i++) {
-      neurons.at(i)->setInput(input.at(i));
-    }
+    // for (size_t i = 0; i < input.size(); i++) {
+    //   neurons.at(i)->setInput(input.at(i));
+    // }
   }
 
   std::vector<double> FeedForward::getOutput() const {
-    auto neurons = layers.back()->getNeurons();
-    std::vector<double> result;
+    // auto neurons = layers.back()->getNeurons();
+    // std::vector<double> result;
 
-    for (size_t i = 0; i < neurons.size(); i++) {
-      result.push_back(neurons.at(i)->getOutput());
-    }
+    // for (size_t i = 0; i < neurons.size(); i++) {
+    //   result.push_back(neurons.at(i)->getOutput());
+    // }
 
-    return result;
+    return layers.back()->getOutput();
+    //    return result;
   }
 
   void FeedForward::activate() {
@@ -62,12 +65,14 @@ namespace brainy {
       throw new std::logic_error("Network must have at least 2 layers.");
     }
 
-    if (layers.back()->hasBias()) {
-      throw new std::logic_error("Output layer cannot include bias.");
-    }
+    //    if (layers.back()->hasBias()) {
+    //  throw new std::logic_error("Output layer cannot include bias.");
+    //}
 
-    for (int i = 0; i < layers.size() - 1; i++) {
-      Layer::interconnect(*layers.at(i), *layers.at(i+1));
+    for (size_t i = 1; i < layers.size(); i++) {
+      //      Layer::interconnect(*layers.at(i), *layers.at(i+1));
+      layers.at(i)->setPrevLayer(*layers.at(i-1));
+      //std::cout << "interconnect -> " << i << std::endl;
     }
 
     getRandomizer().randomize(*this);

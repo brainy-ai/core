@@ -19,30 +19,58 @@
 #define BRAINY_LAYER_HH
 
 #include <vector>
-#include "brainy/neuron.hh"
-#include "brainy/activation/linear.hh"
+#include <cassert>
 
 namespace brainy {
-  class ActivationFunction;
-
   class Layer {
   public:
     Layer(size_t const neurons);
-    Layer(size_t const neurons, ActivationFunction &activation);
-    Layer(size_t const neurons, ActivationFunction &activation, bool const bias);
-    Neuron& neuron(size_t const index) const;
-    std::vector<Neuron*>& getNeurons();
-    static void interconnect(Layer& source, Layer& target);
-    void activate();
-    bool hasBias() const;
-    ActivationFunction &getActivation() const;
+    virtual ~Layer() {};
+    virtual void activate() {};
+    virtual void derivative() {};
+    inline size_t getNeurons() {
+      return neurons;
+    }
+    std::vector<double> &getOutput();
+    std::vector<double> &getDerivatives();
 
-  private:
-    static Linear defaultActivation;
-    static Linear biasActivation;
-    ActivationFunction &activation;
-    void init(size_t const neurons, bool const bias);
-    std::vector<Neuron*> neurons;
+    inline double getInput() {
+      double sum = 0;
+      if (prevLayer == nullptr) {
+        for (auto x : getOutput()) {
+          sum += x;
+        }
+      } else {
+        for (auto x : prevLayer->getOutput()) {
+          sum += x;
+        }
+      }
+
+      return sum;
+    }
+
+    inline size_t inputsPerNeuron() {
+      //assert(prevLayer != nullptr);
+      if (prevLayer == nullptr) {
+        return 1; // input layer ????????????
+      }
+      return prevLayer->getNeurons();
+    }
+
+    inline double getWeight(size_t const neuron, size_t const input) {
+      return weight[neuron * inputsPerNeuron() + input];
+    }
+    inline void setWeight(size_t const neuron, size_t const input, double const value) {
+      weight[neuron * inputsPerNeuron() + input] = value;
+    }
+    void setPrevLayer(Layer &layer);
+
+  protected:
+    size_t const neurons;
+    std::vector<double> output;
+    std::vector<double> weight;
+    std::vector<double> derivatives;
+    Layer *prevLayer;
   };
 }
 

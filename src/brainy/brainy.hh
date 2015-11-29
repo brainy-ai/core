@@ -1,5 +1,7 @@
 #include "brainy/connection.hh"
 #include "brainy/layer.hh"
+#include "brainy/input_layer.hh"
+#include "brainy/tanh_layer.hh"
 #include "brainy/neuron.hh"
 #include "brainy/training_data.hh"
 

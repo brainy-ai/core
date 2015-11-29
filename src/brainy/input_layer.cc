@@ -15,18 +15,8 @@
  * limitations under the License.
  */
 
-#include "brainy/randomize/basic_randomize.hh"
-#include "brainy/network/feed_forward.hh"
-#include "brainy/util.hh"
+#include "brainy/input_layer.hh"
 
 namespace brainy {
-  void BasicRandomize::randomize(FeedForward &net) {
-    // for (auto layer : net.getLayers()) {
-    //   for (auto neuron : layer->getNeurons()) {
-    //     for (auto conn : neuron->getOutputs()) {
-    //       conn->setWeight(util::random(-0.5, 0.5));
-    //     }
-    //   }
-    // }
-  }
+
 }

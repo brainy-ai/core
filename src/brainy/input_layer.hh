@@ -15,18 +15,22 @@
  * limitations under the License.
  */
 
-#include "brainy/randomize/basic_randomize.hh"
-#include "brainy/network/feed_forward.hh"
-#include "brainy/util.hh"
+#ifndef BRAINY_INPUT_LAYER_HH
+#define BRAINY_INPUT_LAYER_HH
+
+#include <vector>
+#include "brainy/layer.hh"
 
 namespace brainy {
-  void BasicRandomize::randomize(FeedForward &net) {
-    // for (auto layer : net.getLayers()) {
-    //   for (auto neuron : layer->getNeurons()) {
-    //     for (auto conn : neuron->getOutputs()) {
-    //       conn->setWeight(util::random(-0.5, 0.5));
-    //     }
-    //   }
-    // }
-  }
+  class InputLayer : public Layer {
+  public:
+    InputLayer(size_t const neurons) : Layer(neurons) {}
+    void setInput(std::vector<double> input) {
+      assert(output.size() == input.size());
+      output = input;
+    };
+    virtual void activate() {};
+  };
 }
+
+#endif

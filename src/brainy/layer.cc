@@ -17,78 +17,27 @@
 
 #include "brainy/layer.hh"
 #include "brainy/activation/linear.hh"
+#include "brainy/util.hh"
 
 #include <cstddef>
 
 namespace brainy {
-  Linear Layer::defaultActivation;
-  Linear Layer::biasActivation;
-
-  Layer::Layer(size_t const neurons) : activation(defaultActivation) {
-    init(neurons, false);
+  Layer::Layer(size_t const neurons) : neurons(neurons ){
+    output.resize(neurons, 0.0);
+    derivatives.resize(neurons, 0.0);
   }
 
-  Layer::Layer(size_t const neurons, ActivationFunction &activation) : activation(activation) {
-    init(neurons, false);
+  std::vector<double> &Layer::getOutput() {
+    return output;
   }
 
-  Layer::Layer(size_t const neurons, ActivationFunction &activation, bool const bias) : activation(activation) {
-    init(neurons, bias);
+  std::vector<double> &Layer::getDerivatives() {
+    return derivatives;
   }
 
-  Neuron& Layer::neuron(size_t const index) const {
-    return *neurons.at(index);
-  }
+  void Layer::setPrevLayer(Layer &layer) {
+    prevLayer = &layer;
 
-  std::vector<Neuron*>& Layer::getNeurons() {
-    return neurons;
-  }
-
-  void Layer::activate() {
-    for (auto it = neurons.begin(); it != neurons.end(); it++) {
-      auto neuron = *it;
-      neuron->activate();
-    }
-  }
-
-  void Layer::init(size_t const neurons, bool const bias) {
-    for (size_t i = 0; i < neurons; i++) {
-      Neuron *neuron = new Neuron(activation, false);
-      this->neurons.push_back(neuron);
-    }
-
-    if (bias) {
-      Neuron *biasNeuron = new Neuron(biasActivation, true);
-      this->neurons.push_back(biasNeuron);
-    }
-
-    this->activation = activation;
-  }
-
-  bool Layer::hasBias() const {
-    for (auto it = neurons.begin(); it != neurons.end(); it++) {
-      auto neuron = *it;
-      if (neuron->isBias()) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  ActivationFunction &Layer::getActivation() const {
-    return activation;
-  }
-
-  void Layer::interconnect(Layer& source, Layer& target) {
-    for (auto source : source.getNeurons()) {
-      for (auto target : target.getNeurons()) {
-        if (target->isBias()) {
-          continue;
-        }
-
-        new Connection(*source, *target);
-      }
-    }
+    weight.resize(output.size() * prevLayer->getOutput().size(), brainy::util::randomWeight());
   }
 }

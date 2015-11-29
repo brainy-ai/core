@@ -24,18 +24,36 @@
 
 namespace brainy {
   void BackPropagation::preTrain() {
-    for (auto &layer : static_cast<FeedForward*>(&network)->getLayers()) {
-      for (auto &neuron : layer->getNeurons()) {
-        auto data = new BPTrainingData();
-        data->flatSpotFix = neuron->getActivation().getFlatSpotFix();
-        neuron->setTrainingData(data);
+    auto layers = static_cast<FeedForward*>(&network)->getLayers();
 
-        for (auto &conn : neuron->getInputs()) {
-          auto data = new BPConnectionData();
-          conn->setTrainingData(data);
-        }
+    deltas.resize(layers.size());
+    lastChanges.resize(layers.size());
+    changes.resize(layers.size());
+
+    // changes [ layer ] [ neuron ] [ input ]
+    for (size_t i = 0; i < layers.size(); i++) {
+      deltas[i].resize(layers[i]->getOutput().size(), 0.0);
+      lastChanges[i].resize(layers[i]->getOutput().size(), 0.0);
+
+      changes[i].resize(layers[i]->getNeurons());
+
+      for (size_t n = 0; n < layers[i]->getNeurons(); n++) {
+        changes[i][n].resize(layers[i]->inputsPerNeuron(), 0.0);
       }
     }
+
+    // for (auto &layer : static_cast<FeedForward*>(&network)->getLayers()) {
+    //   for (auto &neuron : layer->getNeurons()) {
+    //     auto data = new BPTrainingData();
+    //     data->flatSpotFix = neuron->getActivation().getFlatSpotFix();
+    //     neuron->setTrainingData(data);
+
+    //     for (auto &conn : neuron->getInputs()) {
+    //       auto data = new BPConnectionData();
+    //       conn->setTrainingData(data);
+    //     }
+    //   }
+    // }
 
     Trainer::preTrain();
   }
@@ -58,6 +76,11 @@ namespace brainy {
       network.setInput(item.input);
       network.activate();
 
+      auto layers = static_cast<FeedForward*>(&network)->getLayers();
+      for (auto layer : layers) {
+        layer->derivative();
+      }
+
       std::vector<double> patternError = error.calculate(network.getOutput(), item.output);
       propagate(patternError);
 
@@ -73,70 +96,80 @@ namespace brainy {
   }
 
   void BackPropagation::applyBatchChanges() {
-    for (auto &layer : static_cast<FeedForward*>(&network)->getLayers()) {
-      for (auto &neuron : layer->getNeurons()) {
-        for (auto &conn : neuron->getInputs()) {
-          BPConnectionData *cData = static_cast<BPConnectionData*>(conn->getTrainingData());
-          conn->setWeight(conn->getWeight() + cData->change);
-          cData->change = 0.0;
+    auto layers = static_cast<FeedForward*>(&network)->getLayers();
+    for (size_t l = 1; l < layers.size(); l++) {
+      for (size_t n = 0; n < layers[l]->getNeurons(); n++) {
+        for (size_t i = 0; i < layers[l]->inputsPerNeuron(); i++) {
+          layers[l]->setWeight(n, i, changes[l][n][i]);
+          changes[l][n][i] = 0.0;
         }
       }
     }
+    // for (auto &layer : static_cast<FeedForward*>(&network)->getLayers()) {
+    //   for (auto &neuron : layer->getNeurons()) {
+    //     for (auto &conn : neuron->getInputs()) {
+    //       BPConnectionData *cData = static_cast<BPConnectionData*>(conn->getTrainingData());
+    //       conn->setWeight(conn->getWeight() + cData->change);
+    //       cData->change = 0.0;
+    //     }
+    //   }
+    // }
   }
 
-  void BackPropagation::updateNeuronWeights(Neuron* const neuron) {
-    for (auto &input : neuron->getInputs()) {
-      BPTrainingData *data = static_cast<BPTrainingData*>(neuron->getTrainingData());
+  void BackPropagation::updateNeuronWeights(size_t const layerIndex, size_t const neuronIndex) {
+    auto layers = static_cast<FeedForward*>(&network)->getLayers();
 
-      double change = getLearningRate() * data->delta * input->getValue();
-      change += getMomentum() * data->lastChange;
+    assert(layerIndex > 0);
+    for (size_t i = 0; i < layers[layerIndex]->inputsPerNeuron(); i++) {
+      double change = getLearningRate() * deltas[layerIndex][neuronIndex] * layers[layerIndex-1]->getInput(); // input!
+      change += getMomentum() * lastChanges[layerIndex][neuronIndex];
+      lastChanges[layerIndex][neuronIndex] = change;
 
-      data->lastChange = change;
-
-      BPConnectionData *cData = static_cast<BPConnectionData*>(input->getTrainingData());
-      cData->change += change;
+      changes[layerIndex][neuronIndex][i] += change;
     }
   }
 
   void BackPropagation::calculateOutputDeltas(const std::vector<double> &patternError) {
-    auto layer = static_cast<FeedForward*>(&network)->getLayers().back();
-    auto neurons = layer->getNeurons();
+    std::vector<double> output = network.getOutput();
+    size_t layerIndex = static_cast<FeedForward*>(&network)->getLayers().size() - 1;
+    std::vector<double> derivatives = static_cast<FeedForward*>(&network)->getLayers().back()->getDerivatives();
 
-    assert(neurons.size() == patternError.size());
-
-    for (size_t i = 0; i < neurons.size(); i++) {
-      auto &neuron = neurons.at(i);
-      double derivative = neuron->getActivation().derivative(neuron->getOutput());
-      BPTrainingData *data = static_cast<BPTrainingData*>(neuron->getTrainingData());
-      data->delta = patternError[i] * (derivative + data->flatSpotFix);
-
-      updateNeuronWeights(neuron);
+    for (size_t i = 0; i < output.size(); i++) {
+      deltas[layerIndex][i] = patternError[i] * (derivatives[i] + 0.1); // flat spot
+      updateNeuronWeights(layerIndex, i);
     }
   }
 
   void BackPropagation::calculateInternalDeltas() {
     auto layers = static_cast<FeedForward*>(&network)->getLayers();
-    for (size_t i = layers.size() - 2; i >= 1; i--) {
-      auto layer = layers.at(i);
+    for (size_t l = layers.size() - 2; l >= 1; l--) {
+      auto layer = layers.at(l);
+      auto nLayer = layers.at(l+1);
 
-      for (auto &neuron : layer->getNeurons()) {
-        if (neuron->isBias()) {
-          continue;
-        }
-
+      for (size_t n = 0; n < layer->getNeurons(); n++) {
         double deltaSum = 0.0;
-        for (auto &conn : neuron->getOutputs()) {
-          BPTrainingData *tData = static_cast<BPTrainingData*>(conn->getTarget().getTrainingData());
-          deltaSum += conn->getWeight() * tData->delta;
+
+        for (size_t nn = 0; nn < nLayer->getNeurons(); nn++) {
+          deltaSum += nLayer->getWeight(nn, n) * deltas[l+1][nn];
         }
 
-        BPTrainingData *data = static_cast<BPTrainingData*>(neuron->getTrainingData());
-        double derivative = neuron->getActivation().derivative(neuron->getOutput());
-        data->delta = (derivative + data->flatSpotFix) * deltaSum;
+        deltas[l][n] = (layer->getDerivatives()[n] + 0.1) * deltaSum;
 
-        updateNeuronWeights(neuron);
+        updateNeuronWeights(l, n);
       }
     }
+    //     for (auto &conn : neuron->getOutputs()) {
+    //       BPTrainingData *tData = static_cast<BPTrainingData*>(conn->getTarget().getTrainingData());
+    //       deltaSum += conn->getWeight() * tData->delta;
+    //     }
+
+    //     BPTrainingData *data = static_cast<BPTrainingData*>(neuron->getTrainingData());
+    //     double derivative = neuron->getActivation().derivative(neuron->getOutput());
+    //     data->delta = (derivative + data->flatSpotFix) * deltaSum;
+
+    //     updateNeuronWeights(neuron);
+    //   }
+    // }
   }
 
   void BackPropagation::propagate(const std::vector<double> &patternError) {
