@@ -25,7 +25,7 @@ namespace brainy {
   }
 
   double Tanh::derivative(const double output) const {
-    return alpha * (1.0 - (output * output));
+    return alpha * (1.0 - std::pow(output, 2));
   }
 
   bool Tanh::hasFlatSpot() const {

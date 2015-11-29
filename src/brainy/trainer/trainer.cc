@@ -41,14 +41,15 @@ namespace brainy {
   }
 
   void Trainer::postEpoch() {
-    error.reset();
-    for (const TrainingPair &item : trainingSet) {
-      network.setInput(item.input);
-      network.activate();
+    // error.reset();
+    // for (const TrainingPair &item : trainingSet) {
+    //   network.setInput(item.input);
+    //   network.activate();
 
-      error.calculate(network.getOutput(), item.output);
-    }
-    epochError = error.getResult();
+    //   error.calculate(network.getOutput(), item.output);
+    // }
+    // epochError = error.getResult();
+    epochError = 1.0;
 
     for (auto *plugin : plugins) {
       plugin->postEpoch();

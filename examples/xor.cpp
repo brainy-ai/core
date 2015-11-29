@@ -33,11 +33,11 @@ int main(void) {
   brainy::Tanh activation;
 
   // Input layer with 2 neurons, linear activation and BIAS
-  brainy::Layer inputLayer(2, linear, true);
+  brainy::Layer inputLayer(100, linear, false);
   // Hidden layer with 2 neurons, tanh activation and BIAS
-  brainy::Layer hiddenLayer(2, activation, true);
+  brainy::Layer hiddenLayer(100, activation, false);
   // Output layer with 1 neuron, tanh activation
-  brainy::Layer outputLayer(1, activation);
+  brainy::Layer outputLayer(100, activation);
 
   // Create network, and plug defined layers
   brainy::FeedForward network;
@@ -46,13 +46,18 @@ int main(void) {
   network.addLayer(outputLayer);
   network.finalize();
 
+  for (int i = 0; i < 500000; i++) {
+    network.activate();
+  }
+  return 0;
+
   brainy::BackPropagation trainer(network, truthTable);
 
   // Monitor plugin to see what's happening during training
-  brainy::Monitor monitor;
-  trainer.addPlugin(monitor);
+  //brainy::Monitor monitor;
+  //trainer.addPlugin(monitor);
 
-  brainy::SmartLearningRate slr;
+  //brainy::SmartLearningRate slr;
   //  trainer.addPlugin(slr);
 
   // Set training parameters
