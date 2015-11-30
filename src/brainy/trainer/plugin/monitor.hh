@@ -35,7 +35,7 @@ namespace brainy {
     LearningRate *learningRate;
     Momentum *momentum;
 
-    int cycles = 1;
+    int cycles = 1000;
     int lastShow;
     unsigned long long start;
   };
