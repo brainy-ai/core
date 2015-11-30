@@ -66,7 +66,7 @@ namespace brainy {
       throw new std::logic_error("Output layer cannot include bias.");
     }
 
-    for (int i = 0; i < layers.size() - 1; i++) {
+    for (size_t i = 0; i < layers.size() - 1; i++) {
       Layer::interconnect(*layers.at(i), *layers.at(i+1));
     }
 
