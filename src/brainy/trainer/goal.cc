@@ -18,11 +18,4 @@
 #include "brainy/trainer/goal.hh"
 
 namespace brainy {
-  void Goal::setGoal(const double goal) {
-    this->goal = goal;
-  }
-
-  double Goal::getGoal() const {
-    return goal;
-  }
 }

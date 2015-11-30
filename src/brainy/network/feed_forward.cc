@@ -41,10 +41,10 @@ namespace brainy {
 
   std::vector<double> FeedForward::getOutput() const {
     auto neurons = layers.back()->getNeurons();
-    std::vector<double> result;
+    std::vector<double> result(neurons.size());
 
     for (size_t i = 0; i < neurons.size(); i++) {
-      result.push_back(neurons.at(i)->getOutput());
+      result[i] = neurons.at(i)->getOutput();
     }
 
     return result;

@@ -29,12 +29,24 @@ namespace brainy {
     Neuron(ActivationFunction &activation, bool const bias);
     void activate();
     double getInput() const;
-    void setInput(double const input);
-    double getOutput() const;
-    std::vector<Connection*>& getInputs();
-    std::vector<Connection*>& getOutputs();
-    bool isBias() const;
-    TrainingData *getTrainingData() const;
+    inline void setInput(double const input) {
+      this->input = input;
+    }
+    inline double getOutput() const {
+      return output;
+    }
+    inline std::vector<Connection*>& getInputs() {
+      return inputs;
+    }
+    inline std::vector<Connection*>& getOutputs() {
+      return outputs;
+    }
+    inline bool isBias() const {
+      return bias;
+    }
+    inline TrainingData *getTrainingData() const {
+      return trainingData;
+    }
     void setTrainingData(TrainingData *data);
     ActivationFunction &getActivation() const;
     int const id;

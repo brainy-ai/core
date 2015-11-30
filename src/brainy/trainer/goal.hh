@@ -22,8 +22,12 @@ namespace brainy {
   class Goal {
   public:
     virtual ~Goal() {};
-    void setGoal(const double goal);
-    double getGoal() const;
+    inline void setGoal(const double goal) {
+      this->goal = goal;
+    }
+    inline double getGoal() const {
+      return goal;
+    }
   private:
     double goal = 0.05;
   };

@@ -22,8 +22,12 @@ namespace brainy {
   class LearningRate {
   public:
     virtual ~LearningRate() {};
-    void setLearningRate(const double learningRate);
-    double getLearningRate() const;
+    inline void setLearningRate(const double learningRate) {
+      this->learningRate = learningRate;
+    }
+    inline double getLearningRate() const {
+      return learningRate;
+    }
   private:
     double learningRate = 0.7;
   };

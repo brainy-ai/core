@@ -38,38 +38,14 @@ namespace brainy {
     return sum;
   }
 
-  bool Neuron::isBias() const {
-    return bias;
-  }
-
-  void Neuron::setInput(const double input) {
-    this->input = input;
-  }
-
   void Neuron::activate() {
     double value = inputs.empty() ? input : inputsSum();
     // output = (activation != nullptr) ? activation->primary(value) : value;
     output = activation.primary(value);
   }
 
-  double Neuron::getOutput() const {
-    return output;
-  }
-
-  std::vector<Connection*>& Neuron::getInputs() {
-    return inputs;
-  }
-
-  std::vector<Connection*>& Neuron::getOutputs() {
-    return outputs;
-  }
-
   void Neuron::setTrainingData(TrainingData *data) {
     this->trainingData = data;
-  }
-
-  TrainingData *Neuron::getTrainingData() const {
-    return trainingData;
   }
 
   ActivationFunction &Neuron::getActivation() const {

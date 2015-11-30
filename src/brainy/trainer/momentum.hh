@@ -22,8 +22,12 @@ namespace brainy {
   class Momentum {
   public:
     virtual ~Momentum() {};
-    void setMomentum(const double momentum);
-    double getMomentum() const;
+    inline void setMomentum(const double momentum) {
+      this->momentum = momentum;
+    }
+    inline double getMomentum() const {
+      return momentum;
+    }
   private:
     double momentum = 0.0;
   };

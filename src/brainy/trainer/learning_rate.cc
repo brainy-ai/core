@@ -18,11 +18,4 @@
 #include "brainy/trainer/learning_rate.hh"
 
 namespace brainy {
-  void LearningRate::setLearningRate(const double learningRate) {
-    this->learningRate = learningRate;
-  }
-
-  double LearningRate::getLearningRate() const {
-    return learningRate;
-  }
 }

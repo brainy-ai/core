@@ -18,11 +18,4 @@
 #include "brainy/trainer/momentum.hh"
 
 namespace brainy {
-  void Momentum::setMomentum(const double momentum) {
-    this->momentum = momentum;
-  }
-
-  double Momentum::getMomentum() const {
-    return momentum;
-  }
 }
