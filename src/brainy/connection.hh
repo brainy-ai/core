@@ -32,6 +32,7 @@ namespace brainy {
     Neuron &getTarget() const;
     double getWeight() const;
     void setWeight(double const weight);
+    void addWeight(double const value);
     double getValue() const;
     double getWeighedValue() const;
     TrainingData *getTrainingData() const;

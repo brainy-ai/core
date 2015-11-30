@@ -77,7 +77,7 @@ namespace brainy {
       for (auto &neuron : layer->getNeurons()) {
         for (auto &conn : neuron->getInputs()) {
           BPConnectionData *cData = static_cast<BPConnectionData*>(conn->getTrainingData());
-          conn->setWeight(conn->getWeight() + cData->change);
+          conn->addWeight(cData->change);
           cData->change = 0.0;
         }
       }

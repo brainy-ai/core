@@ -47,6 +47,10 @@ namespace brainy {
     this->weight = weight;
   }
 
+  void Connection::addWeight(double const value) {
+    this->weight += value;
+  }
+
   double Connection::getValue() const {
     return source->getOutput();
   }
